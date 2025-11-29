@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <NoWarn>CS8625;CS8767;CS8618;CA1822;IDE1005;IDE0090</NoWarn>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DataBase\Configuration\" />
+    <Folder Include="Helper\KillProces\" />
+    <Folder Include="Helper\HashPassword\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+</Project>
