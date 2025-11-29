@@ -1,4 +1,7 @@
-﻿using System.Configuration;
+﻿using MedicalAir.DataBase;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Configuration;
 using System.Data;
 using System.Windows;
 
@@ -9,10 +12,25 @@ namespace MedicalAir.Config
         [STAThread]
         public static void Main()
         {
-            App app = new App();
+            using (var context = DbContextFactory.Create())
+            {
+                context.Database.EnsureCreated();
+            }
+
+            var app = new App();
             app.InitializeComponent();
             app.Run();
         }
     }
 
+    public static class DbContextFactory
+    {
+        public static DBContext Create()
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<DBContext>();
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=MedicalAirDB;Trusted_Connection=True;");
+
+            return new DBContext(optionsBuilder.Options);
+        }
+    }
 }
