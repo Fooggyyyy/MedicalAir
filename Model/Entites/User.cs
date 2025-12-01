@@ -18,6 +18,7 @@ namespace MedicalAir.Model.Entites
         public string? Email { get; set; }
         public string? HashPassword { get; set; }
         public UserRoles Roles { get; set; }
+        public bool IsBlocked { get; set; } = false;
 
         public List<Certificat>? Certificats { get; set; }
         public List<Notification>? Notifications { get; set; }
@@ -32,6 +33,7 @@ namespace MedicalAir.Model.Entites
             Email = email;
             HashPassword = hashPassword;
             Roles = roles;
+            IsBlocked = false;
         }
 
         public User(string? fullName, string? email, string? hashPassword, UserRoles roles)
@@ -40,6 +42,7 @@ namespace MedicalAir.Model.Entites
             Email = email;
             HashPassword = hashPassword;
             Roles = roles;
+            IsBlocked = false;
         }
 
         public User() { }

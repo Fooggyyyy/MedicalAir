@@ -32,6 +32,10 @@ namespace MedicalAir.DataBase.Configuration
             builder.Property(u => u.AirplaneId)
                 .IsRequired(false);
 
+            builder.Property(u => u.IsBlocked)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             builder.HasOne(u => u.Airplane)
                 .WithMany(a => a.Users)
                 .HasForeignKey(u => u.AirplaneId)

@@ -13,9 +13,12 @@ namespace MedicalAir.DataBase.Repositories.Implementations
 
         public async Task<IEnumerable<Notification>> GetByUserIdAsync(int userId)
         {
+            // Фильтруем уведомления старше недели
+            var weekAgo = DateTime.Now.AddDays(-7);
             return await _dbSet
                 .Include(n => n.User)
-                .Where(n => n.UserId == userId)
+                .Where(n => n.UserId == userId && n.CreatedDate >= weekAgo)
+                .OrderByDescending(n => n.CreatedDate)
                 .ToListAsync();
         }
     }

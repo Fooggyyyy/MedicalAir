@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedicalAir.Helper.WindowManager;
+using MedicalAir.Model.Session;
+using MedicalAir.View.General;
 
 namespace MedicalAir.View.Pilot
 {
@@ -22,6 +14,33 @@ namespace MedicalAir.View.Pilot
         public InfoPilotWindow()
         {
             InitializeComponent();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            Session.UserId = 0;
+            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT;
+            WindowManager.ShowAndCloseCurrent(new LoginWindow());
+        }
+
+        private void MainPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new MainPilotWindow());
+        }
+
+        private void RegButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new RegPilotWindow());
+        }
+
+        private void ProcedureButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new ProcedurePilotWindow());
+        }
+
+        private void NotificationButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new NotificationPilotWindow());
         }
     }
 }

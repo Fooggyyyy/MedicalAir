@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedicalAir.Config;
+using MedicalAir.DataBase.UnitOfWork;
+using MedicalAir.Helper.WindowManager;
+using MedicalAir.Model.Session;
+using MedicalAir.View.General;
+using MedicalAir.ViewModel.Admin;
 
 namespace MedicalAir.View.Admin
 {
@@ -22,6 +17,20 @@ namespace MedicalAir.View.Admin
         public MainAdminWindow()
         {
             InitializeComponent();
+            var dbContext = DbContextFactory.Create();
+            DataContext = new MainAdminViewModel(new UnitOfWork(dbContext));
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            Session.UserId = 0;
+            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT; // Сброс роли
+            WindowManager.ShowAndCloseCurrent(new LoginWindow());
+        }
+
+        private void ReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new ReportWindow());
         }
     }
 }

@@ -3,10 +3,153 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedicalAir.View.General"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800">
+        Title="MedicalAir - Вход в систему"
+        Icon="pack://application:,,,/icon.png"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
     <Grid>
-        
+        <!-- Фоновый градиент -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#667eea" Offset="0"/>
+                <GradientStop Color="#764ba2" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <!-- Основной контент -->
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Border Background="White"
+                    CornerRadius="15"
+                    Padding="50"
+                    MaxWidth="450"
+                    MinWidth="350"
+                    Margin="20">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
+                </Border.Effect>
+                
+                <StackPanel>
+                    <!-- Заголовок -->
+                    <TextBlock Text="MedicalAir"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="#667eea"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10"/>
+                    
+                    <TextBlock Text="Добро пожаловать!"
+                               FontSize="18"
+                               Foreground="#666"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,30"/>
+
+                    <!-- Email -->
+                    <TextBlock Text="Email"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#333"
+                               Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="14"
+                             Padding="12,10"
+                             BorderBrush="#ddd"
+                             BorderThickness="1"
+                             Margin="0,0,0,15">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="BorderBrush" Value="#ddd"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#667eea"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+
+                    <!-- Пароль -->
+                    <TextBlock Text="Пароль"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#333"
+                               Margin="0,0,0,5"/>
+                    <PasswordBox x:Name="PasswordBox"
+                                 FontSize="14"
+                                 Padding="12,10"
+                                 BorderBrush="#ddd"
+                                 BorderThickness="1"
+                                 PasswordChanged="PasswordBox_PasswordChanged"
+                                 Margin="0,0,0,20">
+                        <PasswordBox.Style>
+                            <Style TargetType="PasswordBox">
+                                <Setter Property="BorderBrush" Value="#ddd"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsFocused" Value="True">
+                                        <Setter Property="BorderBrush" Value="#667eea"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </PasswordBox.Style>
+                    </PasswordBox>
+
+                    <!-- Кнопка входа -->
+                    <Button Content="Войти"
+                            Command="{Binding LoginCommand}"
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Padding="0,12"
+                            Background="#667eea"
+                            Foreground="White"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            Margin="0,0,0,15">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#667eea"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#5568d3"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#4457c2"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Ссылка на регистрацию -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="Нет аккаунта? "
+                                   Foreground="#666"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock x:Name="RegisterLink"
+                                   Text="Зарегистрируйтесь"
+                                   Foreground="#667eea"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Cursor="Hand"
+                                   TextDecorations="Underline"
+                                   MouseLeftButtonDown="RegisterLink_MouseLeftButtonDown">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="#667eea"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="#5568d3"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

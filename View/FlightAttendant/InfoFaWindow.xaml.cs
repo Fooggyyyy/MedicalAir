@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedicalAir.Helper.WindowManager;
+using MedicalAir.Model.Session;
+using MedicalAir.View.General;
 
 namespace MedicalAir.View.FlightAttendant
 {
@@ -22,6 +14,38 @@ namespace MedicalAir.View.FlightAttendant
         public InfoFaWindow()
         {
             InitializeComponent();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            Session.UserId = 0;
+            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT;
+            WindowManager.ShowAndCloseCurrent(new LoginWindow());
+        }
+
+        private void MainPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new MainFaWindow());
+        }
+
+        private void RegButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new RegFaWindow());
+        }
+
+        private void MedicamentsButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new MedicamentsFaWindow());
+        }
+
+        private void ProcedureButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new ProcedureFaWindow());
+        }
+
+        private void NotificationButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new NotificationFaWindow());
         }
     }
 }

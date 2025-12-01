@@ -5,8 +5,302 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedicalAir.View.Pilot"
         mc:Ignorable="d"
-        Title="NotificationPilotWindow" Height="450" Width="800">
+        Title="MedicalAir - Уведомления"
+        Icon="pack://application:,,,/icon.png"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F7FA">
     <Grid>
+        <!-- Верхняя панель -->
+        <Border Background="#F3F3F3"
+                Height="50"
+                VerticalAlignment="Top"
+                BorderBrush="#D0D0D0"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" 
+                           Orientation="Horizontal" 
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0">
+                    <TextBlock Text="MedicalAir"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#4299e1"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text=" - Уведомления"
+                               FontSize="18"
+                               Foreground="#666"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+                
+                <Button x:Name="LogoutButton"
+                        Grid.Column="1"
+                        Content="🚪 Выйти из аккаунта"
+                        Width="180"
+                        Height="40"
+                        Margin="0,0,30,0"
+                        Background="#f56565"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="LogoutButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#f56565"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#e53e3e"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Боковая панель навигации -->
+        <Border Background="White"
+                Width="250"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                Margin="0,70,0,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel Margin="15,20,15,20">
+                <TextBlock Text="Навигация"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#4299e1"
+                           Margin="0,0,0,20"/>
+                
+                <Button x:Name="MainPageButton"
+                        Content="🏠 Главная"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="MainPageButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="InfoButton"
+                        Content="ℹ️ Информация"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="InfoButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="RegButton"
+                        Content="📋 Регистрации"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="RegButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="ProcedureButton"
+                        Content="⚙️ Процедуры"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="ProcedureButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="NotificationButton"
+                        Content="🔔 Уведомления"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#4299e1"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#4299e1"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#3182ce"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
         
+        <!-- Основной контент -->
+        <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Панель управления -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    Padding="20"
+                    Margin="0,0,0,20"
+                    CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="🔔 Мои уведомления"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#4299e1"
+                               VerticalAlignment="Center"/>
+
+                    <Button Grid.Column="1"
+                            Content="🔄 Обновить"
+                            Command="{Binding RefreshNotifications}"
+                            Width="120"
+                            Height="35"
+                            Background="#4299e1"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#4299e1"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#3182ce"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Список уведомлений -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    Padding="20"
+                    CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- DataGrid с уведомлениями -->
+                    <DataGrid Grid.Row="0"
+                              ItemsSource="{Binding Notifications}"
+                              SelectedItem="{Binding SelectedNotification}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="All"
+                              AlternatingRowBackground="#F5F7FA"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" CanUserResize="True"/>
+                            <DataGridTextColumn Header="Сообщение" Binding="{Binding MessageBody}" Width="*" CanUserResize="True"/>
+                            <DataGridTemplateColumn Header="Дата создания" Width="150" CanUserResize="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding CreatedDate, StringFormat='dd.MM.yyyy HH:mm'}" HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Информация о количестве -->
+                    <TextBlock Grid.Row="1"
+                               Text="{Binding Notifications.Count, StringFormat='Всего уведомлений: {0}'}"
+                               FontSize="14"
+                               Foreground="#666"
+                               Margin="0,15,0,0"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

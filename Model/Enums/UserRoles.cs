@@ -10,6 +10,7 @@ namespace MedicalAir.Model.Enums
     {
         FLIGHTATTENDAT,
         PILOT,
-        DOCTOR
+        DOCTOR,
+        ADMIN
     }
 }

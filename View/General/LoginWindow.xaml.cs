@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedicalAir.Config;
+using MedicalAir.DataBase.UnitOfWork;
+using MedicalAir.Helper.HashPassword;
+using MedicalAir.Helper.WindowManager;
+using MedicalAir.ViewModel.General;
 
 namespace MedicalAir.View.General
 {
@@ -22,6 +17,21 @@ namespace MedicalAir.View.General
         public LoginWindow()
         {
             InitializeComponent();
+            var dbContext = DbContextFactory.Create();
+            DataContext = new LoginViewModel(new UnitOfWork(dbContext), new HashPasswordService());
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel vm && sender is PasswordBox pb)
+            {
+                vm.Password = pb.Password;
+            }
+        }
+
+        private void RegisterLink_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new RegisterWindow());
         }
     }
 }

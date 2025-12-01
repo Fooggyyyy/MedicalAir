@@ -20,6 +20,10 @@ namespace MedicalAir.DataBase.Configuration
                 .HasMaxLength(2000)
                 .IsRequired(false);
 
+            builder.Property(n => n.CreatedDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+
             builder.HasOne(n => n.User)
                 .WithMany(u => u.Notifications)
                 .HasForeignKey(n => n.UserId)

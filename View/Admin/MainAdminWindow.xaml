@@ -3,10 +3,487 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MedicalAir.View.Admin"
         mc:Ignorable="d"
-        Title="MainAdminWindow" Height="450" Width="800">
+        Title="MedicalAir - Панель администратора"
+        Icon="pack://application:,,,/icon.png"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F7FA">
     <Grid>
-        
+        <!-- Верхняя панель -->
+        <Border Background="#F3F3F3"
+                Height="50"
+                VerticalAlignment="Top"
+                BorderBrush="#D0D0D0"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" 
+                           Orientation="Horizontal" 
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0">
+                    <TextBlock Text="MedicalAir"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#667eea"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text=" - Панель администратора"
+                               FontSize="18"
+                               Foreground="#666"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+                
+                <Button x:Name="LogoutButton"
+                        Grid.Column="1"
+                        Content="🚪 Выйти из аккаунта"
+                        Width="180"
+                        Height="40"
+                        Margin="0,0,30,0"
+                        Background="#f56565"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="LogoutButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#f56565"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#e53e3e"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Боковая панель навигации -->
+        <Border Background="White"
+                Width="250"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                Margin="0,70,0,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel Margin="15,20,15,20">
+                <TextBlock Text="Навигация"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#667eea"
+                           Margin="0,0,0,20"/>
+                
+                <Button x:Name="MainPageButton"
+                        Content="🏠 Главная"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#667eea"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#667eea"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#5568d3"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="ReportButton"
+                        Content="📊 Статистика"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="ReportButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!-- Основной контент -->
+        <Grid Margin="280,90,20,20" 
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Самолеты -->
+            <Border Grid.Row="1" Grid.Column="0"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    Margin="0,0,15,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1"/>
+                </Border.Effect>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" 
+                               Orientation="Horizontal"
+                               Margin="0,0,0,15"
+                               HorizontalAlignment="Right">
+                        <Button Content="➕ Добавить"
+                               Command="{Binding AddAirplane}"
+                               Background="#667eea"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand"
+                               Margin="0,0,5,0">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#667eea"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#5568d3"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="✏️ Изменить"
+                               Command="{Binding EditAirplane}"
+                               Background="#48bb78"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand"
+                               Margin="0,0,5,0">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#48bb78"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#38a169"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="🗑️ Удалить"
+                               Command="{Binding DeleteAirplane}"
+                               Background="#f56565"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#f56565"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#e53e3e"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Самолеты"
+                              FontSize="18"
+                              FontWeight="Bold"
+                              Foreground="#333"
+                              DockPanel.Dock="Top"
+                              Margin="0,0,0,15"/>
+                    <DataGrid ItemsSource="{Binding Airplanes}"
+                             SelectedItem="{Binding SelectedAirplane}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             BorderThickness="0"
+                             GridLinesVisibility="None"
+                             RowBackground="#F7FAFC"
+                             AlternatingRowBackground="White">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#667eea"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Пользователи -->
+            <Border Grid.Row="1" Grid.Column="1"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    Margin="0,0,15,0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1"/>
+                </Border.Effect>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" 
+                               Orientation="Horizontal"
+                               Margin="0,0,0,15"
+                               HorizontalAlignment="Right">
+                        <Button Content="✈️ Назначить самолет"
+                               Command="{Binding UpdateAirplaneToUser}"
+                               Background="#764ba2"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand"
+                               Margin="0,0,10,0">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#764ba2"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#6a3d8a"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="🔒 Заблокировать/Разблокировать"
+                               Command="{Binding ToggleBlockUser}"
+                               Background="#e53e3e"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#e53e3e"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#c53030"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Пользователи"
+                              FontSize="18"
+                              FontWeight="Bold"
+                              Foreground="#333"
+                              DockPanel.Dock="Top"
+                              Margin="0,0,0,15"/>
+                    <DataGrid ItemsSource="{Binding Users}"
+                             SelectedItem="{Binding SelectedUser}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             BorderThickness="0"
+                             GridLinesVisibility="None"
+                             RowBackground="#F7FAFC"
+                             AlternatingRowBackground="White"
+                             CanUserResizeColumns="True"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60" CanUserResize="True"/>
+                            <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="200" CanUserResize="True"/>
+                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="200" CanUserResize="True"/>
+                            <DataGridTextColumn Header="Самолет" Binding="{Binding Airplane.Name}" Width="150" CanUserResize="True"/>
+                            <DataGridTemplateColumn Header="Статус" Width="140" CanUserResize="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock FontWeight="SemiBold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="✅ Активен"/>
+                                                    <Setter Property="Foreground" Value="Green"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsBlocked}" Value="True">
+                                                            <Setter Property="Text" Value="🔒 Заблокирован"/>
+                                                            <Setter Property="Foreground" Value="Red"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#764ba2"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="10,8"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+
+            <!-- Регистрации пользователей -->
+            <Border Grid.Row="1" Grid.Column="2"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="20">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1"/>
+                </Border.Effect>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" 
+                               Orientation="Horizontal"
+                               Margin="0,0,0,15"
+                               HorizontalAlignment="Right">
+                        <Button Content="➕ Добавить"
+                               Command="{Binding AddRegisterToUser}"
+                               Background="#f5576c"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand"
+                               Margin="0,0,5,0">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#f5576c"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#e4465a"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="✏️ Изменить"
+                               Command="{Binding EditRegisterToUser}"
+                               Background="#48bb78"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand"
+                               Margin="0,0,5,0">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#48bb78"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#38a169"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                        <Button Content="🗑️ Удалить"
+                               Command="{Binding DeleteRegisterToUser}"
+                               Background="#f56565"
+                               Foreground="White"
+                               BorderThickness="0"
+                               Padding="15,8"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#f56565"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#e53e3e"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock Text="Регистрации"
+                              FontSize="18"
+                              FontWeight="Bold"
+                              Foreground="#333"
+                              DockPanel.Dock="Top"
+                              Margin="0,0,0,15"/>
+                    <DataGrid ItemsSource="{Binding RegistrationUsers}"
+                             SelectedItem="{Binding SelectedRegistr}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             BorderThickness="0"
+                             GridLinesVisibility="None"
+                             RowBackground="#F7FAFC"
+                             AlternatingRowBackground="White"
+                             CanUserResizeColumns="True"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Пользователь" Binding="{Binding User.FullName}" Width="200" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Самолет" Binding="{Binding Airplane.Name}" Width="150" CanUserResize="True"/>
+                                <DataGridTemplateColumn Header="Дата" Width="120" CanUserResize="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Data, StringFormat='dd.MM.yyyy'}" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridCheckBoxColumn Header="Подтв." Binding="{Binding IsRegister}" Width="80" CanUserResize="True"/>
+                                <DataGridTextColumn Header="Сообщение" Binding="{Binding MessageBody}" Width="300" CanUserResize="True"/>
+                            </DataGrid.Columns>
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="#f5576c"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Padding" Value="10,8"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                    </DataGrid>
+                </DockPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MedicalAir.Helper.WindowManager;
+using MedicalAir.Model.Session;
+using MedicalAir.View.General;
 
 namespace MedicalAir.View.Doctor
 {
@@ -22,6 +14,43 @@ namespace MedicalAir.View.Doctor
         public MedicamentsProcedureWindow()
         {
             InitializeComponent();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            Session.UserId = 0;
+            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT;
+            WindowManager.ShowAndCloseCurrent(new LoginWindow());
+        }
+
+        private void MainPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new MainDoctorWindow());
+        }
+
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new InfoWindow());
+        }
+
+        private void CertificatButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new CertificatWindow());
+        }
+
+        private void MedicalExaminationButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new MedicalExaminationWindow());
+        }
+
+        private void ReportButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new ReportWindow());
+        }
+
+        private void SendNotificationButton_Click(object sender, RoutedEventArgs e)
+        {
+            WindowManager.ShowAndCloseCurrent(new SendNotificationWindow());
         }
     }
 }

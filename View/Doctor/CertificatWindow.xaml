@@ -5,8 +5,254 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedicalAir.View.Doctor"
         mc:Ignorable="d"
-        Title="CertificatWindow" Height="450" Width="800">
+        Title="MedicalAir - Сертификаты"
+        Icon="pack://application:,,,/icon.png"
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterOwner"
+        Background="#F5F7FA">
     <Grid>
+        <!-- Верхняя панель -->
+        <Border Background="#F3F3F3"
+                Height="50"
+                VerticalAlignment="Top"
+                BorderBrush="#D0D0D0"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" 
+                           Orientation="Horizontal" 
+                           VerticalAlignment="Center"
+                           Margin="20,0,0,0">
+                    <TextBlock Text="MedicalAir"
+                               FontSize="24"
+                               FontWeight="Bold"
+                               Foreground="#48bb78"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text=" - Сертификаты"
+                               FontSize="18"
+                               Foreground="#666"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0"/>
+                </StackPanel>
+                
+                <Button x:Name="LogoutButton"
+                        Grid.Column="1"
+                        Content="🚪 Выйти из аккаунта"
+                        Width="180"
+                        Height="40"
+                        Margin="0,0,30,0"
+                        Background="#f56565"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="LogoutButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#f56565"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#e53e3e"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Боковая панель навигации -->
+        <Border Background="White"
+                Width="250"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                Margin="0,70,0,0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel Margin="15,20,15,20">
+                <TextBlock Text="Навигация"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#48bb78"
+                           Margin="0,0,0,20"/>
+                
+                <Button x:Name="MainPageButton"
+                        Content="🏠 Главная"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="MainPageButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="InfoButton"
+                        Content="ℹ️ Информация"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="InfoButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="CertificatButton"
+                        Content="📜 Сертификаты"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#48bb78"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#48bb78"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#38a169"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="MedicalExaminationButton"
+                        Content="🏥 Медосмотры"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="MedicalExaminationButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="MedicamentsProcedureButton"
+                        Content="💊 Процедуры с лекарствами"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="MedicamentsProcedureButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="ReportButton"
+                        Content="📊 Отчеты"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="ReportButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                
+                <Button x:Name="SendNotificationButton"
+                        Content="📨 Отправить уведомление"
+                        Height="50"
+                        Margin="0,0,0,10"
+                        Background="#e2e8f0"
+                        Foreground="#333"
+                        BorderThickness="0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="SendNotificationButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#e2e8f0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#cbd5e0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
         
+        <!-- Основной контент -->
+        <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock Text="Сертификаты"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       Foreground="#48bb78"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>
