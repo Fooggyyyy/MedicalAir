@@ -1,8 +1,11 @@
 ﻿using System.Linq;
 using System.Windows;
+using MedicalAir.Config;
+using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Session;
 using MedicalAir.View.General;
+using MedicalAir.ViewModel.Doctor;
 
 namespace MedicalAir.View.Doctor
 {
@@ -14,6 +17,8 @@ namespace MedicalAir.View.Doctor
         public MainDoctorWindow()
         {
             InitializeComponent();
+            var dbContext = DbContextFactory.Create();
+            DataContext = new MainDoctorViewModel(new UnitOfWork(dbContext));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

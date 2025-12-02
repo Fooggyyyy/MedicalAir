@@ -14,6 +14,8 @@ namespace MedicalAir.View.Doctor
         public ReportWindow()
         {
             InitializeComponent();
+            var dbContext = Config.DbContextFactory.Create();
+            DataContext = new ViewModel.Doctor.ReportViewModel(new DataBase.UnitOfWork.UnitOfWork(dbContext));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

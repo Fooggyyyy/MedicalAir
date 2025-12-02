@@ -247,12 +247,156 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Информация"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#48bb78"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <TabControl BorderThickness="0" Background="Transparent">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="20,10"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="Opacity" Value="0.6"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#48bb78"/>
+                                <Setter Property="Opacity" Value="1.0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabControl.Resources>
+
+                <!-- История пополнений лекарств -->
+                <TabItem Header="💊 История пополнений лекарств">
+                    <Border Background="White" Padding="15" CornerRadius="8">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <DataGrid ItemsSource="{Binding HistoryUpMedicins}"
+                                 AutoGenerateColumns="False"
+                                 IsReadOnly="True"
+                                 HeadersVisibility="Column"
+                                 GridLinesVisibility="All"
+                                 AlternatingRowBackground="#F5F7FA">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="200"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Count}" Width="100"/>
+                                <DataGridTextColumn Header="Дата пополнения" Binding="{Binding UpData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                <DataGridCheckBoxColumn Header="Действителен" Binding="{Binding IsValid}" Width="100"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </TabItem>
+
+                <!-- Медосмотры пилотов -->
+                <TabItem Header="✈️ Медосмотры пилотов">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Пройденные медосмотры" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <DataGrid x:Name="PilotValidExaminationsDataGrid" Grid.Row="1" ItemsSource="{Binding PilotValidExaminations}"
+                                 AutoGenerateColumns="False"
+                                 IsReadOnly="True"
+                                 HeadersVisibility="Column"
+                                 GridLinesVisibility="All"
+                                 AlternatingRowBackground="#F5F7FA"
+                                 Margin="0,0,0,20"
+                                 LoadingRow="DataGrid_LoadingRow">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Пользователь" Binding="{Binding User.FullName}" Width="200"/>
+                                <DataGridTemplateColumn Header="Процедуры" Width="250">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" TextWrapping="Wrap"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                <DataGridCheckBoxColumn Header="Пройден" Binding="{Binding IsValid}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <!-- Не пройденные медосмотры пилотов -->
+                <TabItem Header="❌ Не пройденные медосмотры пилотов">
+                    <DataGrid x:Name="PilotInvalidExaminationsDataGrid" ItemsSource="{Binding PilotInvalidExaminations}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             GridLinesVisibility="All"
+                             AlternatingRowBackground="#F5F7FA"
+                             LoadingRow="DataGrid_LoadingRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Пользователь" Binding="{Binding User.FullName}" Width="200"/>
+                            <DataGridTemplateColumn Header="Процедуры" Width="250">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" TextWrapping="Wrap"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <!-- Медосмотры бортпроводников -->
+                <TabItem Header="👥 Медосмотры бортпроводников">
+                    <DataGrid x:Name="FlightAttendantValidExaminationsDataGrid" ItemsSource="{Binding FlightAttendantValidExaminations}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             GridLinesVisibility="All"
+                             AlternatingRowBackground="#F5F7FA"
+                             LoadingRow="DataGrid_LoadingRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Пользователь" Binding="{Binding User.FullName}" Width="200"/>
+                            <DataGridTemplateColumn Header="Процедуры" Width="250">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" TextWrapping="Wrap"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridCheckBoxColumn Header="Пройден" Binding="{Binding IsValid}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <!-- Не пройденные медосмотры бортпроводников -->
+                <TabItem Header="❌ Не пройденные медосмотры бортпроводников">
+                    <DataGrid x:Name="FlightAttendantInvalidExaminationsDataGrid" ItemsSource="{Binding FlightAttendantInvalidExaminations}"
+                             AutoGenerateColumns="False"
+                             IsReadOnly="True"
+                             HeadersVisibility="Column"
+                             GridLinesVisibility="All"
+                             AlternatingRowBackground="#F5F7FA"
+                             LoadingRow="DataGrid_LoadingRow">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Пользователь" Binding="{Binding User.FullName}" Width="200"/>
+                            <DataGridTemplateColumn Header="Процедуры" Width="250">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" TextWrapping="Wrap"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                            <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

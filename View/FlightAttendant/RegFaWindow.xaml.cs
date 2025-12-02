@@ -14,6 +14,8 @@ namespace MedicalAir.View.FlightAttendant
         public RegFaWindow()
         {
             InitializeComponent();
+            var dbContext = Config.DbContextFactory.Create();
+            DataContext = new ViewModel.FlightAttendant.RegFaViewModel(new DataBase.UnitOfWork.UnitOfWork(dbContext));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Уведомление"
         Icon="pack://application:,,,/icon.png"
-        Height="200" Width="450"
+        Height="150" Width="300"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
@@ -27,7 +27,7 @@
             <Border Grid.Row="0"
                     Background="#F3F3F3"
                     CornerRadius="12,12,0,0"
-                    Padding="20,15">
+                    Padding="10,8">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -35,12 +35,12 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="IconTextBlock"
                                Grid.Column="0"
-                               FontSize="24"
-                               Margin="0,0,15,0"
+                               FontSize="16"
+                               Margin="0,0,10,0"
                                VerticalAlignment="Center"/>
                     <TextBlock x:Name="TitleTextBlock"
                                Grid.Column="1"
-                               FontSize="18"
+                               FontSize="14"
                                FontWeight="Bold"
                                Foreground="#333"
                                VerticalAlignment="Center"/>
@@ -48,31 +48,32 @@
             </Border>
 
             <!-- Сообщение -->
-            <TextBlock x:Name="MessageTextBlock"
-                       Grid.Row="1"
-                       TextWrapping="Wrap"
-                       FontSize="14"
-                       Foreground="#666"
-                       Margin="20,20"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"/>
+            <ScrollViewer Grid.Row="1"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Disabled"
+                         Margin="10,10">
+                <TextBlock x:Name="MessageTextBlock"
+                           TextWrapping="Wrap"
+                           FontSize="12"
+                           Foreground="#666"
+                           TextAlignment="Left"/>
+            </ScrollViewer>
 
             <!-- Кнопки -->
             <Border Grid.Row="2"
                     Background="#F9F9F9"
                     CornerRadius="0,0,12,12"
-                    Padding="20,15">
+                    Padding="10,8">
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button x:Name="OkButton"
                             Content="OK"
-                            Width="100"
-                            Height="36"
+                            Width="80"
+                            Height="28"
                             Background="#667eea"
                             Foreground="White"
                             BorderThickness="0"
-                            FontSize="14"
+                            FontSize="12"
                             FontWeight="SemiBold"
                             Cursor="Hand"
                             Click="OkButton_Click"

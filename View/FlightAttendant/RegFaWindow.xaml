@@ -224,12 +224,57 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Регистрации"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#ed8936"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Border Grid.Row="0" Background="White" Padding="15" Margin="0,0,0,15" CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <Button Content="✅ Пройти регистрацию" 
+                        Command="{Binding PassRegistration}" 
+                        Width="200" 
+                        Height="40" 
+                        Background="#48bb78" 
+                        Foreground="White" 
+                        FontSize="14" 
+                        FontWeight="SemiBold" 
+                        Cursor="Hand"
+                        HorizontalAlignment="Left">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#48bb78"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#38a169"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Border>
+            
+            <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <DataGrid ItemsSource="{Binding Registrations}"
+                         SelectedItem="{Binding SelectedRegistration}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         HeadersVisibility="Column"
+                         GridLinesVisibility="All"
+                         AlternatingRowBackground="#F5F7FA">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Самолет" Binding="{Binding Airplane.Name}" Width="200"/>
+                        <DataGridTextColumn Header="Дата регистрации" Binding="{Binding Data, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                        <DataGridCheckBoxColumn Header="Зарегистрирован" Binding="{Binding IsRegister}" Width="120"/>
+                        <DataGridTextColumn Header="Сообщение" Binding="{Binding MessageBody}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

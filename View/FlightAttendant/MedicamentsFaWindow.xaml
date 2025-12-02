@@ -224,12 +224,123 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Лекарства"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#ed8936"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Панель управления -->
+            <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" Text="{Binding MedkitName}" ToolTip="Название аптечки" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                    <Button Grid.Column="1" Content="➕ Создать аптечку" Command="{Binding AddMedkit}" Width="150" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                    <Button Grid.Column="2" Content="🗑️ Удалить аптечку" Command="{Binding DeleteMedkit}" Width="150" Height="40" Background="#f56565" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                    <Button Grid.Column="3" Content="🗑️ Удалить просроченные" Command="{Binding DeleteExpiredMedicins}" Width="200" Height="40" Background="#ed8936" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                    <Button Grid.Column="4" Content="🔄 Обновить валидность" Command="{Binding UpdateMedkitValidity}" Width="180" Height="40" Background="#667eea" Foreground="White" Cursor="Hand"/>
+                </Grid>
+            </Border>
+
+            <!-- Таблицы аптечек и лекарств -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Аптечки -->
+                <Border Grid.Column="0" Background="White" Padding="15" Margin="0,0,10,0" CornerRadius="8">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Аптечки на борту:" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                        <DataGrid ItemsSource="{Binding Medkits}"
+                                 SelectedItem="{Binding SelectedMedkit}"
+                                 AutoGenerateColumns="False"
+                                 IsReadOnly="True"
+                                 HeadersVisibility="Column"
+                                 GridLinesVisibility="All"
+                                 AlternatingRowBackground="#F5F7FA"
+                                 SelectionChanged="MedkitDataGrid_SelectionChanged">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding NameMedkit}" Width="*"/>
+                                <DataGridCheckBoxColumn Header="Валидна" Binding="{Binding IsValid}" Width="80"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Лекарства в выбранной аптечке и доступные лекарства -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Лекарства в аптечке -->
+                    <Border Grid.Row="0" Background="White" Padding="15" Margin="0,0,0,10" CornerRadius="8">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Лекарства в аптечке:" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <DataGrid x:Name="MedicinsInMedkitDataGrid"
+                                     ItemsSource="{Binding SelectedMedkit.Medicins}"
+                                     SelectedItem="{Binding SelectedMedicin}"
+                                     AutoGenerateColumns="False"
+                                     IsReadOnly="True"
+                                     HeadersVisibility="Column"
+                                     GridLinesVisibility="All"
+                                     AlternatingRowBackground="#F5F7FA"
+                                     SelectionChanged="MedicinsInMedkitDataGrid_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Состав" Binding="{Binding Composition}" Width="*"/>
+                                    <DataGridTextColumn Header="Срок годности" Binding="{Binding HistoryUpMedicin.EndData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="➖ Удалить из аптечки" Command="{Binding RemoveMedicinFromMedkit}" Width="200" Height="40" Background="#f56565" Foreground="White" Margin="0,10,0,0" Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Доступные лекарства -->
+                    <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Доступные лекарства:" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                            <DataGrid x:Name="AvailableMedicinsDataGrid"
+                                     ItemsSource="{Binding AvailableMedicins}"
+                                     SelectedItem="{Binding SelectedMedicin}"
+                                     AutoGenerateColumns="False"
+                                     IsReadOnly="True"
+                                     HeadersVisibility="Column"
+                                     GridLinesVisibility="All"
+                                     AlternatingRowBackground="#F5F7FA"
+                                     SelectionChanged="AvailableMedicinsDataGrid_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Состав" Binding="{Binding Composition}" Width="*"/>
+                                    <DataGridTextColumn Header="Срок годности" Binding="{Binding HistoryUpMedicin.EndData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Content="➕ Добавить в аптечку" Command="{Binding AddMedicinToMedkit}" Width="200" Height="40" Background="#48bb78" Foreground="White" Margin="0,10,0,0" Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

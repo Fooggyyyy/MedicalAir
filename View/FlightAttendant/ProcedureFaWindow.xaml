@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedicalAir.View.FlightAttendant"
+        xmlns:converters="clr-namespace:MedicalAir.Helper.Converters"
         mc:Ignorable="d"
         Title="MedicalAir - Процедуры"
         Icon="pack://application:,,,/icon.png"
@@ -224,12 +225,77 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Процедуры"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#ed8936"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Border Background="White" Padding="15" CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <DataGrid ItemsSource="{Binding Procedures}"
+                         SelectedItem="{Binding SelectedProcedure}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         HeadersVisibility="Column"
+                         GridLinesVisibility="All"
+                         AlternatingRowBackground="#F5F7FA">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Процедура" Binding="{Binding Procedure.Name}" Width="200"/>
+                        <DataGridTextColumn Header="Описание" Binding="{Binding Procedure.Description}" Width="*"/>
+                        <DataGridTemplateColumn Header="Тип" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <Binding Path="Procedure.MustBeTrue">
+                                                <Binding.Converter>
+                                                    <converters:BoolToTestConverter/>
+                                                </Binding.Converter>
+                                            </Binding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Пройдена" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding UserProcedure.IsValid}" IsEnabled="False" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Действие" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="✅ Пройти" 
+                                           Command="{Binding DataContext.PassProcedure, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{Binding}"
+                                           Width="120"
+                                           Height="30"
+                                           Background="#48bb78"
+                                           Foreground="White"
+                                           BorderThickness="0"
+                                           FontSize="12"
+                                           Cursor="Hand"
+                                           IsEnabled="{Binding CanPass}">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Background" Value="#48bb78"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="#cbd5e0"/>
+                                                        <Setter Property="Foreground" Value="#666"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#38a169"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

@@ -226,7 +226,25 @@
                               FontWeight="Bold"
                               Foreground="#333"
                               DockPanel.Dock="Top"
-                              Margin="0,0,0,15"/>
+                              Margin="0,0,0,10"/>
+                    <Grid DockPanel.Dock="Top" Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding SearchAirplanes, UpdateSourceTrigger=PropertyChanged}" 
+                                 ToolTip="Поиск по названию или ID" 
+                                 Padding="10,8" 
+                                 FontSize="14" 
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="✕" 
+                                Command="{Binding ClearSearchAirplanes}" 
+                                Width="40" 
+                                Height="40" 
+                                Background="#f56565" 
+                                Foreground="White" 
+                                Cursor="Hand"/>
+                    </Grid>
                     <DataGrid ItemsSource="{Binding Airplanes}"
                              SelectedItem="{Binding SelectedAirplane}"
                              AutoGenerateColumns="False"
@@ -313,7 +331,25 @@
                               FontWeight="Bold"
                               Foreground="#333"
                               DockPanel.Dock="Top"
-                              Margin="0,0,0,15"/>
+                              Margin="0,0,0,10"/>
+                    <Grid DockPanel.Dock="Top" Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding SearchUsers, UpdateSourceTrigger=PropertyChanged}" 
+                                 ToolTip="Поиск по ФИО, Email, самолету или ID" 
+                                 Padding="10,8" 
+                                 FontSize="14" 
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="✕" 
+                                Command="{Binding ClearSearchUsers}" 
+                                Width="40" 
+                                Height="40" 
+                                Background="#f56565" 
+                                Foreground="White" 
+                                Cursor="Hand"/>
+                    </Grid>
                     <DataGrid ItemsSource="{Binding Users}"
                              SelectedItem="{Binding SelectedUser}"
                              AutoGenerateColumns="False"
@@ -447,7 +483,25 @@
                               FontWeight="Bold"
                               Foreground="#333"
                               DockPanel.Dock="Top"
-                              Margin="0,0,0,15"/>
+                              Margin="0,0,0,10"/>
+                    <Grid DockPanel.Dock="Top" Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding SearchRegistrations, UpdateSourceTrigger=PropertyChanged}" 
+                                 ToolTip="Поиск по пользователю, самолету, сообщению, дате или ID" 
+                                 Padding="10,8" 
+                                 FontSize="14" 
+                                 Margin="0,0,10,0"/>
+                        <Button Grid.Column="1" Content="✕" 
+                                Command="{Binding ClearSearchRegistrations}" 
+                                Width="40" 
+                                Height="40" 
+                                Background="#f56565" 
+                                Foreground="White" 
+                                Cursor="Hand"/>
+                    </Grid>
                     <DataGrid ItemsSource="{Binding RegistrationUsers}"
                              SelectedItem="{Binding SelectedRegistr}"
                              AutoGenerateColumns="False"

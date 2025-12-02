@@ -1,8 +1,12 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using MedicalAir.Config;
+using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Session;
 using MedicalAir.View.General;
+using MedicalAir.ViewModel.Doctor;
 
 namespace MedicalAir.View.Doctor
 {
@@ -14,6 +18,17 @@ namespace MedicalAir.View.Doctor
         public CertificatWindow()
         {
             InitializeComponent();
+            var dbContext = DbContextFactory.Create();
+            DataContext = new CertificatViewModel(new UnitOfWork(dbContext));
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is CertificatViewModel vm && vm.SelectedCertificat != null)
+            {
+                vm.DataStart = vm.SelectedCertificat.DataStart.ToDateTime(TimeOnly.MinValue);
+                vm.DataEnd = vm.SelectedCertificat.DataEnd.ToDateTime(TimeOnly.MinValue);
+            }
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

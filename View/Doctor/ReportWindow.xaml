@@ -247,12 +247,121 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Отчеты"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#48bb78"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Панель фильтров -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    Padding="20"
+                    Margin="0,0,0,20"
+                    CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="Период:"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="#333"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
+
+                    <DatePicker Grid.Column="1"
+                                SelectedDate="{Binding DateStart}"
+                                FontSize="14"
+                                Margin="0,0,15,0"/>
+
+                    <TextBlock Grid.Column="2"
+                               Text="до"
+                               FontSize="16"
+                               Foreground="#666"
+                               VerticalAlignment="Center"
+                               Margin="0,0,15,0"/>
+
+                    <DatePicker Grid.Column="3"
+                                SelectedDate="{Binding DateEnd}"
+                                FontSize="14"
+                                Margin="0,0,15,0"/>
+
+                    <Button Grid.Column="5"
+                            Content="📊 Создать отчет"
+                            Command="{Binding LoadReports}"
+                            Width="180"
+                            Height="40"
+                            Background="#48bb78"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#48bb78"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#38a169"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Таблица отчетов по лекарствам -->
+            <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                </Border.Effect>
+                <DataGrid ItemsSource="{Binding ReportMedicins}"
+                         SelectedItem="{Binding SelectedReportMedicin}"
+                         AutoGenerateColumns="False"
+                         IsReadOnly="True"
+                         SelectionMode="Single"
+                         HeadersVisibility="Column"
+                         GridLinesVisibility="All"
+                         AlternatingRowBackground="#F5F7FA"
+                         CanUserResizeColumns="True"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Всего медикаментов" Binding="{Binding TotalMedicines}" Width="140" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Уникальных" Binding="{Binding TotalUniqueMedicines}" Width="100" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Аптечек" Binding="{Binding TotalMedkit}" Width="80" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Просрочено" Binding="{Binding ExpiredCount}" Width="100" CanUserResize="True"/>
+                        <DataGridTextColumn Header="Скоро истечет" Binding="{Binding AlmostExpiredCount}" Width="120" CanUserResize="True"/>
+                        <DataGridTemplateColumn Header="Просрочено %" Width="110" CanUserResize="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ExpiredCountPercent}" FontSize="11" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Скоро истечет %" Width="130" CanUserResize="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding AlmostExpiredCountPercent}" FontSize="11" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

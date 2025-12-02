@@ -3,6 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
+using MedicalAir.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace MedicalAir.ViewModel.Pilot
     public class MainPilotViewModel : ViewModelBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly NotificationService _notificationService;
 
         private User currentUser;
         public User CurrentUser
@@ -56,6 +58,7 @@ namespace MedicalAir.ViewModel.Pilot
         public MainPilotViewModel(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _notificationService = new NotificationService(unitOfWork);
             AirplaneName = "Не назначен";
             RegistrationDate = "Нет данных";
             RegistrationStatus = "Не зарегистрирован";
@@ -131,6 +134,10 @@ namespace MedicalAir.ViewModel.Pilot
                     IsRegistered = false;
                     RegistrationStatus = "Не зарегистрирован";
                 }
+
+                // Генерируем автоматические уведомления
+                await _notificationService.GenerateAutomaticNotificationsAsync(Session.UserId);
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {

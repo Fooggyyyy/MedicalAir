@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using MedicalAir.Helper.WindowManager;
+using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
 using MedicalAir.View.General;
 
@@ -14,6 +16,8 @@ namespace MedicalAir.View.Doctor
         public InfoWindow()
         {
             InitializeComponent();
+            var dbContext = Config.DbContextFactory.Create();
+            DataContext = new ViewModel.Doctor.InfoViewModel(new DataBase.UnitOfWork.UnitOfWork(dbContext));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +55,14 @@ namespace MedicalAir.View.Doctor
         private void SendNotificationButton_Click(object sender, RoutedEventArgs e)
         {
             WindowManager.ShowAndCloseCurrent(new SendNotificationWindow());
+        }
+
+        private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (e.Row.Item is MedicalExamination examination && DataContext is ViewModel.Doctor.InfoViewModel vm)
+            {
+                e.Row.Tag = vm.GetProceduresForExamination(examination);
+            }
         }
     }
 }

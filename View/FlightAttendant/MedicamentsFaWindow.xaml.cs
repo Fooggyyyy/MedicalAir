@@ -14,6 +14,29 @@ namespace MedicalAir.View.FlightAttendant
         public MedicamentsFaWindow()
         {
             InitializeComponent();
+            var dbContext = Config.DbContextFactory.Create();
+            DataContext = new ViewModel.FlightAttendant.MedicamentsFaViewModel(new DataBase.UnitOfWork.UnitOfWork(dbContext));
+        }
+
+        private void MedkitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            // Обновление данных при выборе аптечки происходит автоматически через привязку
+        }
+
+        private void MedicinsInMedkitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (DataContext is ViewModel.FlightAttendant.MedicamentsFaViewModel vm && sender is System.Windows.Controls.DataGrid dg)
+            {
+                vm.SelectedMedicin = dg.SelectedItem as MedicalAir.Model.Entites.Medicin;
+            }
+        }
+
+        private void AvailableMedicinsDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (DataContext is ViewModel.FlightAttendant.MedicamentsFaViewModel vm && sender is System.Windows.Controls.DataGrid dg)
+            {
+                vm.SelectedMedicin = dg.SelectedItem as MedicalAir.Model.Entites.Medicin;
+            }
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

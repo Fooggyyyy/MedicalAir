@@ -56,14 +56,15 @@ namespace MedicalAir.ViewModel.Admin
         //
 
         private ObservableCollection<RegistrationUser> registrationUsers;
+        private ObservableCollection<RegistrationUser> allRegistrationUsers;
         public ObservableCollection<RegistrationUser> RegistrationUsers
         {
             get => registrationUsers;
             set => Set(ref registrationUsers, value);
-
         }
 
         private ObservableCollection<Airplane> airplanes;
+        private ObservableCollection<Airplane> allAirplanes;
         public ObservableCollection<Airplane> Airplanes
         {
             get => airplanes;
@@ -71,10 +72,44 @@ namespace MedicalAir.ViewModel.Admin
         }
 
         private ObservableCollection<User> users;
+        private ObservableCollection<User> allUsers;
         public ObservableCollection<User> Users
         {
             get => users;
             set => Set(ref users, value);
+        }
+
+        private string searchAirplanes;
+        public string SearchAirplanes
+        {
+            get => searchAirplanes;
+            set
+            {
+                Set(ref searchAirplanes, value);
+                FilterAirplanes();
+            }
+        }
+
+        private string searchUsers;
+        public string SearchUsers
+        {
+            get => searchUsers;
+            set
+            {
+                Set(ref searchUsers, value);
+                FilterUsers();
+            }
+        }
+
+        private string searchRegistrations;
+        public string SearchRegistrations
+        {
+            get => searchRegistrations;
+            set
+            {
+                Set(ref searchRegistrations, value);
+                FilterRegistrations();
+            }
         }
 
         private RegistrationUser selectedRegistr;
@@ -112,6 +147,9 @@ namespace MedicalAir.ViewModel.Admin
         public ICommand ToggleBlockUser { get; set; }
 
         public ICommand LoadData { get; set; }
+        public ICommand ClearSearchAirplanes { get; set; }
+        public ICommand ClearSearchUsers { get; set; }
+        public ICommand ClearSearchRegistrations { get; set; }
         public MainAdminViewModel(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -132,7 +170,73 @@ namespace MedicalAir.ViewModel.Admin
 
             ToggleBlockUser = CreateAsyncCommand(ToggleBlockUserAsync, () => SelectedUser != null);
 
+            ClearSearchAirplanes = CreateCommand(_ => { SearchAirplanes = ""; });
+            ClearSearchUsers = CreateCommand(_ => { SearchUsers = ""; });
+            ClearSearchRegistrations = CreateCommand(_ => { SearchRegistrations = ""; });
+
             LoadDataAsync();
+        }
+
+        private void FilterAirplanes()
+        {
+            if (allAirplanes == null) return;
+
+            if (string.IsNullOrWhiteSpace(SearchAirplanes))
+            {
+                Airplanes = new ObservableCollection<Airplane>(allAirplanes);
+            }
+            else
+            {
+                var searchLower = SearchAirplanes.ToLower();
+                var filtered = allAirplanes.Where(a => 
+                    (a.Name?.ToLower().Contains(searchLower) ?? false) ||
+                    a.Id.ToString().Contains(searchLower)
+                ).ToList();
+                Airplanes = new ObservableCollection<Airplane>(filtered);
+            }
+        }
+
+        private void FilterUsers()
+        {
+            if (allUsers == null) return;
+
+            if (string.IsNullOrWhiteSpace(SearchUsers))
+            {
+                Users = new ObservableCollection<User>(allUsers);
+            }
+            else
+            {
+                var searchLower = SearchUsers.ToLower();
+                var filtered = allUsers.Where(u => 
+                    (u.FullName?.ToLower().Contains(searchLower) ?? false) ||
+                    (u.Email?.ToLower().Contains(searchLower) ?? false) ||
+                    (u.Airplane?.Name?.ToLower().Contains(searchLower) ?? false) ||
+                    u.Id.ToString().Contains(searchLower)
+                ).ToList();
+                Users = new ObservableCollection<User>(filtered);
+            }
+        }
+
+        private void FilterRegistrations()
+        {
+            if (allRegistrationUsers == null) return;
+
+            if (string.IsNullOrWhiteSpace(SearchRegistrations))
+            {
+                RegistrationUsers = new ObservableCollection<RegistrationUser>(allRegistrationUsers);
+            }
+            else
+            {
+                var searchLower = SearchRegistrations.ToLower();
+                var filtered = allRegistrationUsers.Where(r => 
+                    (r.User?.FullName?.ToLower().Contains(searchLower) ?? false) ||
+                    (r.Airplane?.Name?.ToLower().Contains(searchLower) ?? false) ||
+                    (r.MessageBody?.ToLower().Contains(searchLower) ?? false) ||
+                    r.Data.ToString("dd.MM.yyyy").Contains(searchLower) ||
+                    r.Id.ToString().Contains(searchLower)
+                ).ToList();
+                RegistrationUsers = new ObservableCollection<RegistrationUser>(filtered);
+            }
         }
 
         private async Task LoadDataAsync()
@@ -146,9 +250,13 @@ namespace MedicalAir.ViewModel.Admin
                 // Фильтруем админов из списка пользователей
                 var filteredUsers = usersList.Where(u => u.Roles != Model.Enums.UserRoles.ADMIN).ToList();
 
-                RegistrationUsers = new ObservableCollection<RegistrationUser>(registersList);
-                Airplanes = new ObservableCollection<Airplane>(airplanesList);
-                Users = new ObservableCollection<User>(filteredUsers);
+                allRegistrationUsers = new ObservableCollection<RegistrationUser>(registersList);
+                allAirplanes = new ObservableCollection<Airplane>(airplanesList);
+                allUsers = new ObservableCollection<User>(filteredUsers);
+
+                FilterAirplanes();
+                FilterUsers();
+                FilterRegistrations();
             }
             catch (Exception ex)
             {

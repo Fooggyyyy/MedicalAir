@@ -247,12 +247,143 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Панель врача"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#48bb78"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <!-- Информация о враче -->
+                    <Border Background="White" Padding="25" Margin="0,0,0,20" CornerRadius="8">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="👨‍⚕️ Информация о враче" FontSize="22" FontWeight="Bold" Foreground="#48bb78" Margin="0,0,0,15"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Имя:" FontSize="16" FontWeight="SemiBold" Foreground="#666" Margin="0,0,15,10"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CurrentUser.FullName}" FontSize="16" Foreground="#333" Margin="0,0,0,10"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Email:" FontSize="16" FontWeight="SemiBold" Foreground="#666" Margin="0,0,15,10"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CurrentUser.Email}" FontSize="16" Foreground="#333" Margin="0,0,0,10"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Роль:" FontSize="16" FontWeight="SemiBold" Foreground="#666" Margin="0,0,15,0"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="Врач" FontSize="16" Foreground="#333"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Статистика -->
+                    <TextBlock Text="📊 Статистика" FontSize="22" FontWeight="Bold" Foreground="#48bb78" Margin="0,0,0,15"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Сертификаты -->
+                        <Border Grid.Row="0" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="📜 Сертификаты" FontSize="18" FontWeight="Bold" Foreground="#667eea" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding ActiveCertificatsCount, StringFormat='Активных: {0}'}" FontSize="14" Foreground="#333" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding AlmostExpiredCertificatsCount, StringFormat='Скоро просроченных: {0}'}" FontSize="14" Foreground="#f59e0b" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding ExpiredCertificatsCount, StringFormat='Просроченных: {0}'}" FontSize="14" Foreground="#f56565"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Медосмотры -->
+                        <Border Grid.Row="0" Grid.Column="1" Background="White" Padding="20" Margin="10,0,0,15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="🏥 Медосмотры" FontSize="18" FontWeight="Bold" Foreground="#667eea" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding ValidExaminationsCount, StringFormat='Пройдено: {0}'}" FontSize="14" Foreground="#48bb78" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding InvalidExaminationsCount, StringFormat='Не пройдено: {0}'}" FontSize="14" Foreground="#f56565"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Процедуры и лекарства -->
+                        <Border Grid.Row="1" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="🔬 Процедуры" FontSize="18" FontWeight="Bold" Foreground="#667eea" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding ProceduresCount, StringFormat='Всего процедур: {0}'}" FontSize="14" Foreground="#333"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="1" Background="White" Padding="20" Margin="10,0,0,15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="💊 Лекарства" FontSize="18" FontWeight="Bold" Foreground="#667eea" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding MedicinesCount, StringFormat='Всего записей: {0}'}" FontSize="14" Foreground="#333"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Пользователи -->
+                        <Border Grid.Row="2" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,0" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="👥 Пользователи" FontSize="18" FontWeight="Bold" Foreground="#667eea" Margin="0,0,0,10"/>
+                                <TextBlock Text="{Binding PilotsCount, StringFormat='Пилотов: {0}'}" FontSize="14" Foreground="#333" Margin="0,0,0,5"/>
+                                <TextBlock Text="{Binding FlightAttendantsCount, StringFormat='Бортпроводников: {0}'}" FontSize="14" Foreground="#333"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Кнопка обновления -->
+                        <Border Grid.Row="2" Grid.Column="1" Background="White" Padding="20" Margin="10,0,0,0" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <Button Content="🔄 Обновить данные" 
+                                        Command="{Binding RefreshData}" 
+                                        Width="200" 
+                                        Height="50" 
+                                        Background="#48bb78" 
+                                        Foreground="White" 
+                                        BorderThickness="0" 
+                                        FontSize="14" 
+                                        FontWeight="SemiBold" 
+                                        Cursor="Hand"
+                                        HorizontalAlignment="Center">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Background" Value="#48bb78"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#38a169"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </Window>

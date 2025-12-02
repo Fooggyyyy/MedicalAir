@@ -35,6 +35,9 @@ namespace MedicalAir.Helper.ViewModelBase
         protected ICommand CreateAsyncCommand(Func<object, Task> execute, Func<object, bool> canExecute = null)
             => new RelayCommand(execute, canExecute);
 
+        protected ICommand CreateAsyncCommand<T>(Func<T, Task> execute, Func<T, bool> canExecute = null)
+            => new RelayCommand((obj) => execute((T)obj), (obj) => obj is T item && (canExecute == null || canExecute(item)));
+
         protected ICommand CreateCommand(Action<object> execute, Func<object, bool> canExecute = null)
             => new RelayCommand(execute, canExecute);
     }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MedicalAir.View.Doctor"
+        xmlns:converters="clr-namespace:MedicalAir.Helper.Converters"
         mc:Ignorable="d"
         Title="MedicalAir - Процедуры с лекарствами"
         Icon="pack://application:,,,/icon.png"
@@ -11,6 +12,9 @@
         ResizeMode="CanResize"
         WindowStartupLocation="CenterOwner"
         Background="#F5F7FA">
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
     <Grid>
         <!-- Верхняя панель -->
         <Border Background="#F3F3F3"
@@ -247,12 +251,323 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Процедуры с лекарствами"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#48bb78"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <TabControl BorderThickness="0" Background="Transparent">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="20,10"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="Opacity" Value="0.6"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#48bb78"/>
+                                <Setter Property="Opacity" Value="1.0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabControl.Resources>
+
+                <!-- Процедуры -->
+                <TabItem Header="🔬 Процедуры">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название процедуры:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding ProcedureName}" ToolTip="Название" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Описание:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProcedureDescription}" ToolTip="Описание" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Мин. значение:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding MinValue}" ToolTip="Мин" Margin="0,0,10,0" Padding="10,8" FontSize="14" IsEnabled="{Binding MustBeTrue, Converter={StaticResource InverseBooleanConverter}}"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="3" Text="Макс. значение:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding MaxValue}" ToolTip="Макс" Margin="0,0,10,0" Padding="10,8" FontSize="14" IsEnabled="{Binding MustBeTrue, Converter={StaticResource InverseBooleanConverter}}"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="4" Text="Ед. измерения:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding Units}" ToolTip="Ед. изм." Margin="0,0,10,0" Padding="10,8" FontSize="14" IsEnabled="{Binding MustBeTrue, Converter={StaticResource InverseBooleanConverter}}"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="5" Text="Тип процедуры:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <CheckBox Grid.Row="1" Grid.Column="5" Content="Тест" IsChecked="{Binding MustBeTrue}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                
+                                <Button Grid.Row="1" Grid.Column="6" Content="➕ Добавить" Command="{Binding AddProcedure}" Width="120" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="7" Content="✏️ Изменить" Command="{Binding UpdateProcedure}" Width="120" Height="40" Background="#667eea" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="8" Content="🗑️ Удалить" Command="{Binding DeleteProcedure}" Width="120" Height="40" Background="#f56565" Foreground="White" Margin="0,0,0,0" Cursor="Hand"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <Grid Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding SearchProcedures, UpdateSourceTrigger=PropertyChanged}" 
+                                             ToolTip="Поиск по названию, описанию, единицам измерения, значениям или ID" 
+                                             Padding="10,8" 
+                                             FontSize="14" 
+                                             Margin="0,0,10,0"/>
+                                    <Button Grid.Column="1" Content="✕" 
+                                            Command="{Binding ClearSearchProcedures}" 
+                                            Width="40" 
+                                            Height="40" 
+                                            Background="#f56565" 
+                                            Foreground="White" 
+                                            Cursor="Hand"/>
+                                </Grid>
+                                <DataGrid ItemsSource="{Binding Procedures}" SelectedItem="{Binding SelectedProcedure}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="All" AlternatingRowBackground="#F5F7FA" SelectionChanged="ProcedureDataGrid_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*"/>
+                                    <DataGridTextColumn Header="Мин" Binding="{Binding MinValue}" Width="80"/>
+                                    <DataGridTextColumn Header="Макс" Binding="{Binding MaxValue}" Width="80"/>
+                                    <DataGridTextColumn Header="Ед. изм." Binding="{Binding Units}" Width="100"/>
+                                    <DataGridCheckBoxColumn Header="Тест" Binding="{Binding MustBeTrue}" Width="80"/>
+                                </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Назначение процедур ролям -->
+                <TabItem Header="👥 Назначение процедур">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Процедура:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Procedures}" SelectedItem="{Binding SelectedProcedureForRole}" DisplayMemberPath="Name" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Роль (Пилот/Бортпроводник):" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding AvailableRoles}" SelectedItem="{Binding SelectedRole}" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Примечание: можно назначить одну процедуру или все для выбранной роли" FontSize="11" Foreground="#999" Margin="0,0,10,5" TextWrapping="Wrap"/>
+                                
+                                <Button Grid.Row="1" Grid.Column="3" Content="➕ Назначить процедуру" Command="{Binding AddSingleUserRoleProcedure}" Width="180" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="4" Content="➕ Назначить все" Command="{Binding AddUserRoleProcedure}" Width="150" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="5" Content="🗑️ Удалить" Command="{Binding DeleteUserRoleProcedure}" Width="120" Height="40" Background="#f56565" Foreground="White" Cursor="Hand"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <DataGrid ItemsSource="{Binding UserRoleProcedures}" SelectedItem="{Binding SelectedUserRoleProcedure}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="All" AlternatingRowBackground="#F5F7FA">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Процедура" Binding="{Binding Procedure.Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Роль" Binding="{Binding Roles}" Width="200"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Лекарства -->
+                <TabItem Header="💊 Лекарства">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Название лекарства:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding MedicinName}" ToolTip="Название лекарства" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Состав:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MedicinComposition}" ToolTip="Состав лекарства" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <Button Grid.Row="1" Grid.Column="2" Content="➕ Добавить" Command="{Binding AddMedicin}" Width="120" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="3" Content="✏️ Изменить" Command="{Binding UpdateMedicin}" Width="120" Height="40" Background="#667eea" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="4" Content="🗑️ Удалить" Command="{Binding DeleteMedicin}" Width="120" Height="40" Background="#f56565" Foreground="White" Cursor="Hand"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <Grid Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding SearchMedicins, UpdateSourceTrigger=PropertyChanged}" 
+                                             ToolTip="Поиск по названию, составу или ID" 
+                                             Padding="10,8" 
+                                             FontSize="14" 
+                                             Margin="0,0,10,0"/>
+                                    <Button Grid.Column="1" Content="✕" 
+                                            Command="{Binding ClearSearchMedicins}" 
+                                            Width="40" 
+                                            Height="40" 
+                                            Background="#f56565" 
+                                            Foreground="White" 
+                                            Cursor="Hand"/>
+                                </Grid>
+                                <DataGrid ItemsSource="{Binding Medicins}" SelectedItem="{Binding SelectedMedicin}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="All" AlternatingRowBackground="#F5F7FA" SelectionChanged="MedicinsDataGrid_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                                    <DataGridTextColumn Header="Состав" Binding="{Binding Composition}" Width="*"/>
+                                </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Пополнение лекарств -->
+                <TabItem Header="📦 Пополнение лекарств">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Лекарство для пополнения:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Medicins}" SelectedItem="{Binding SelectedMedicinForReplenishment}" DisplayMemberPath="Name" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Количество:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Count}" ToolTip="Кол-во" Margin="0,0,10,0" Padding="10,8" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Дата пополнения:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <DatePicker Grid.Row="1" Grid.Column="2" SelectedDate="{Binding UpData}" Margin="0,0,10,0" FontSize="14"/>
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="3" Text="Дата окончания срока:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
+                                <DatePicker Grid.Row="1" Grid.Column="3" SelectedDate="{Binding EndData}" Margin="0,0,10,0" FontSize="14"/>
+                                
+                                <Button Grid.Row="1" Grid.Column="4" Content="➕ Пополнить" Command="{Binding AddHistoryUpMedicin}" Width="120" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="5" Content="✏️ Изменить" Command="{Binding UpdateHistoryUpMedicin}" Width="120" Height="40" Background="#667eea" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="6" Content="🗑️ Удалить" Command="{Binding DeleteHistoryUpMedicin}" Width="120" Height="40" Background="#f56565" Foreground="White" Cursor="Hand"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="История пополнений:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <Grid Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding SearchHistoryMedicines, UpdateSourceTrigger=PropertyChanged}" 
+                                             ToolTip="Поиск по названию, количеству, датам или ID" 
+                                             Padding="10,8" 
+                                             FontSize="14" 
+                                             Margin="0,0,10,0"/>
+                                    <Button Grid.Column="1" Content="✕" 
+                                            Command="{Binding ClearSearchHistoryMedicines}" 
+                                            Width="40" 
+                                            Height="40" 
+                                            Background="#f56565" 
+                                            Foreground="White" 
+                                            Cursor="Hand"/>
+                                </Grid>
+                                <DataGrid ItemsSource="{Binding HistoryUpMedicins}" SelectedItem="{Binding SelectedHistoryUpMedicin}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="All" AlternatingRowBackground="#F5F7FA" SelectionChanged="HistoryDataGrid_SelectionChanged">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridTextColumn Header="Количество" Binding="{Binding Count}" Width="100"/>
+                                    <DataGridTextColumn Header="Дата пополнения" Binding="{Binding UpData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                    <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndData, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                    <DataGridCheckBoxColumn Header="Действителен" Binding="{Binding IsValid}" Width="100"/>
+                                </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

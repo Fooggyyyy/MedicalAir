@@ -14,6 +14,8 @@ namespace MedicalAir.View.Pilot
         public ProcedurePilotWindow()
         {
             InitializeComponent();
+            var dbContext = Config.DbContextFactory.Create();
+            DataContext = new ViewModel.Pilot.ProcedurePilotViewModel(new DataBase.UnitOfWork.UnitOfWork(dbContext));
         }
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)

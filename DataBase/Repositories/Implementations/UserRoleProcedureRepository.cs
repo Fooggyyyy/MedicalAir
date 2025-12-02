@@ -12,6 +12,13 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         {
         }
 
+        public override async Task<IEnumerable<UserRoleProcedure>> GetAllAsync()
+        {
+            return await _dbSet
+                .Include(urp => urp.Procedure)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<UserRoleProcedure>> GetByProcedureIdAsync(int procedureId)
         {
             return await _dbSet

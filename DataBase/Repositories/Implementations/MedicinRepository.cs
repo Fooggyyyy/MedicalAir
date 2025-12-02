@@ -11,6 +11,13 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         {
         }
 
+        public override async Task<IEnumerable<Medicin>> GetAllAsync()
+        {
+            return await _dbSet
+                .Include(m => m.HistoryUpMedicin)
+                .ToListAsync();
+        }
+
         public async Task<Medicin?> GetByNameAsync(string name)
         {
             return await _dbSet

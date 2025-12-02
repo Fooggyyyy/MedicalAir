@@ -224,12 +224,110 @@
         
         <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <TextBlock Text="Информация"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       Foreground="#ed8936"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <TabControl BorderThickness="0" Background="Transparent">
+                <TabControl.Resources>
+                    <Style TargetType="TabItem">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="20,10"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                        <Setter Property="Opacity" Value="0.6"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#ed8936"/>
+                                <Setter Property="Opacity" Value="1.0"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabControl.Resources>
+
+                <!-- Медосмотры -->
+                <TabItem Header="🏥 Медосмотры">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Список медосмотров -->
+                        <Border Grid.Column="0" Background="White" Padding="15" Margin="0,0,10,0" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="Медосмотры:" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <DataGrid x:Name="MedicalExaminationsDataGrid" ItemsSource="{Binding MedicalExaminations}"
+                                     SelectedItem="{Binding SelectedMedicalExamination}"
+                                     AutoGenerateColumns="False"
+                                     IsReadOnly="True"
+                                     HeadersVisibility="Column"
+                                     GridLinesVisibility="All"
+                                     AlternatingRowBackground="#F5F7FA"
+                                     LoadingRow="MedicalExaminationsDataGrid_LoadingRow">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="Процедуры" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Tag}" TextWrapping="Wrap"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                    <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                    <DataGridCheckBoxColumn Header="Пройден" Binding="{Binding IsValid}" Width="80"/>
+                                </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Все процедуры пользователя -->
+                        <Border Grid.Column="1" Background="White" Padding="15" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+                            <StackPanel>
+                                <TextBlock Text="Все процедуры:" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <DataGrid ItemsSource="{Binding AllUserProcedures}"
+                                         AutoGenerateColumns="False"
+                                         IsReadOnly="True"
+                                         HeadersVisibility="Column"
+                                         GridLinesVisibility="All"
+                                         AlternatingRowBackground="#F5F7FA">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Процедура" Binding="{Binding Procedure.Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Дата начала" Binding="{Binding StartData, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                        <DataGridTextColumn Header="Дата окончания" Binding="{Binding EndData, StringFormat='dd.MM.yyyy'}" Width="120"/>
+                                        <DataGridCheckBoxColumn Header="Пройдена" Binding="{Binding IsValid}" Width="80"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- Сертификаты -->
+                <TabItem Header="📜 Сертификаты">
+                    <Border Background="White" Padding="15" CornerRadius="8">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
+                        </Border.Effect>
+                        <DataGrid ItemsSource="{Binding Certificats}"
+                                 AutoGenerateColumns="False"
+                                 IsReadOnly="True"
+                                 HeadersVisibility="Column"
+                                 GridLinesVisibility="All"
+                                 AlternatingRowBackground="#F5F7FA">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Дата начала" Binding="{Binding DataStart, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                <DataGridTextColumn Header="Дата окончания" Binding="{Binding DataEnd, StringFormat='dd.MM.yyyy'}" Width="150"/>
+                                <DataGridTextColumn Header="Статус" Binding="{Binding Status}" Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+                </TabItem>
+            </TabControl>
         </Grid>
     </Grid>
 </Window>
