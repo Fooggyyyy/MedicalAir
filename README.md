@@ -3,6 +3,7 @@
 2. Переимовываем исходнык папки из MedicalAir-main в MedicalAir
 3. Кидаем sln как на скриншоте ниже, что бы была такая структура
 <img width="636" height="241" alt="image" src="https://github.com/user-attachments/assets/5147f5f4-0872-46e3-855d-8ff889fd32bf" />
+
 4. ну и после этого все должно запуститься
 
 p.s По бд тут SQL SERVER, образ (localdb)
