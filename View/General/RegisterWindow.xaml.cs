@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MedicalAir.Config;
@@ -13,18 +10,13 @@ using MedicalAir.ViewModel.General;
 
 namespace MedicalAir.View.General
 {
-    /// <summary>
-    /// Класс для отображения ролей с красивыми названиями
-    /// </summary>
+    
     public class UserRoleDisplay
     {
         public UserRoles Value { get; set; }
         public string DisplayName { get; set; }
     }
 
-    /// <summary>
-    /// Логика взаимодействия для RegisterWindow.xaml
-    /// </summary>
     public partial class RegisterWindow : Window
     {
         public RegisterWindow()
@@ -33,13 +25,12 @@ namespace MedicalAir.View.General
             var dbContext = DbContextFactory.Create();
             DataContext = new RegisterViewModel(new UnitOfWork(dbContext), new HashPasswordService());
             
-            // Создаем список ролей с красивыми названиями
             var roles = new List<UserRoleDisplay>
             {
                 new UserRoleDisplay { Value = UserRoles.PILOT, DisplayName = "Пилот" },
                 new UserRoleDisplay { Value = UserRoles.DOCTOR, DisplayName = "Врач" },
                 new UserRoleDisplay { Value = UserRoles.FLIGHTATTENDAT, DisplayName = "Бортпроводник" },
-               //new UserRoleDisplay { Value = UserRoles.ADMIN, DisplayName = "Администратор" }
+               
             };
             
             UserRolesComboBox.ItemsSource = roles;
@@ -58,6 +49,11 @@ namespace MedicalAir.View.General
         private void LoginLink_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             WindowManager.ShowAndCloseCurrent(new LoginWindow());
+        }
+
+        private void FullNameTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !System.Text.RegularExpressions.Regex.IsMatch(e.Text, @"^[\p{L}\s]+$");
         }
     }
 }

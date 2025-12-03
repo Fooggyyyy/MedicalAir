@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using MedicalAir.Model.Entites;
 
@@ -76,4 +75,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

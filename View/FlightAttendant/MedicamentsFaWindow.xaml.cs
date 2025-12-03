@@ -1,14 +1,11 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Session;
 using MedicalAir.View.General;
 
 namespace MedicalAir.View.FlightAttendant
 {
-    /// <summary>
-    /// Логика взаимодействия для MedicamentsFaWindow.xaml
-    /// </summary>
+    
     public partial class MedicamentsFaWindow : Window
     {
         public MedicamentsFaWindow()
@@ -20,7 +17,7 @@ namespace MedicalAir.View.FlightAttendant
 
         private void MedkitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            // Обновление данных при выборе аптечки происходит автоматически через привязку
+            
         }
 
         private void MedicinsInMedkitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)

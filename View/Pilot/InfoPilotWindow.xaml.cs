@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Entites;
@@ -8,9 +7,7 @@ using MedicalAir.View.General;
 
 namespace MedicalAir.View.Pilot
 {
-    /// <summary>
-    /// Логика взаимодействия для InfoPilotWindow.xaml
-    /// </summary>
+    
     public partial class InfoPilotWindow : Window
     {
         public InfoPilotWindow()
@@ -54,7 +51,6 @@ namespace MedicalAir.View.Pilot
                 var procedures = vm.GetProceduresForExamination(examination);
                 e.Row.Tag = procedures;
                 
-                // Обновляем Tag при изменении данных
                 e.Row.DataContextChanged += (s, args) =>
                 {
                     if (e.Row.Item is MedicalExamination exam)

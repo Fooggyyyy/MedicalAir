@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MedicalAir.Model.Entites;
-using MedicalAir.Model.Enums;
 
 namespace MedicalAir.DataBase.Configuration
 {
@@ -68,4 +67,3 @@ namespace MedicalAir.DataBase.Configuration
         }
     }
 }
-

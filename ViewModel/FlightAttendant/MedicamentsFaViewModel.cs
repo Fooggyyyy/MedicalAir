@@ -3,10 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.FlightAttendant
@@ -37,7 +34,7 @@ namespace MedicalAir.ViewModel.FlightAttendant
             {
                 if (Set(ref selectedMedkit, value))
                 {
-                    // При выборе аптечки загружаем её медикаменты
+                    
                     LoadMedkitMedicinsAsync();
                 }
             }
@@ -49,16 +46,15 @@ namespace MedicalAir.ViewModel.FlightAttendant
             {
                 if (SelectedMedkit != null)
                 {
-                    // Перезагружаем аптечку с медикаментами
+                    
                     var medkitWithMedicins = await _unitOfWork.MedkitRepository.GetWithMedicinsAsync(SelectedMedkit.Id);
                     if (medkitWithMedicins != null)
                     {
-                        // Обновляем SelectedMedkit, чтобы обновить коллекцию Medicins
+                        
                         selectedMedkit = medkitWithMedicins;
                         OnPropertyChanged(nameof(SelectedMedkit));
                     }
                     
-                    // Обновляем список доступных лекарств, исключая уже добавленные в аптечку
                     await RefreshAvailableMedicinsAsync();
                 }
             }
@@ -75,7 +71,6 @@ namespace MedicalAir.ViewModel.FlightAttendant
                 var allMedicins = await _unitOfWork.MedicinRepository.GetAllAsync();
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 
-                // Получаем ID лекарств, уже добавленных в выбранную аптечку
                 var medkitMedicinIds = new HashSet<int>();
                 if (SelectedMedkit != null)
                 {
@@ -86,14 +81,13 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     }
                 }
                 
-                // Фильтруем только действительные лекарства, не добавленные в аптечку
                 var validMedicins = allMedicins
                     .Where(m => m.HistoryUpMedicin != null && 
                                 m.HistoryUpMedicin.IsValid && 
                                 m.HistoryUpMedicin.EndData >= today &&
                                 !medkitMedicinIds.Contains(m.Id))
-                    .GroupBy(m => m.Name) // Группируем по названию
-                    .Select(g => g.First()) // Берем первое лекарство из каждой группы
+                    .GroupBy(m => m.Name) 
+                    .Select(g => g.First()) 
                     .ToList();
 
                 AvailableMedicins = new ObservableCollection<Medicin>(validMedicins);
@@ -158,14 +152,11 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     return;
                 }
 
-                // Загружаем аптечки самолета
                 var medkitsList = await _unitOfWork.MedkitRepository.GetByAirplaneIdAsync(user.AirplaneId.Value);
                 Medkits = new ObservableCollection<Medkit>(medkitsList);
 
-                // Загружаем доступные лекарства (исключая уже добавленные в аптечки)
                 await RefreshAvailableMedicinsAsync();
 
-                // Обновляем валидность аптечек
                 await UpdateMedkitValidityAsync();
             }
             catch (Exception ex)
@@ -242,7 +233,6 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     return;
                 }
 
-                // Загружаем аптечку с лекарствами
                 var medkitWithMedicins = await _unitOfWork.MedkitRepository.GetWithMedicinsAsync(SelectedMedkit.Id);
                 if (medkitWithMedicins == null)
                 {
@@ -250,14 +240,12 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     return;
                 }
 
-                // Проверяем, не добавлено ли уже это лекарство
                 if (medkitWithMedicins.Medicins != null && medkitWithMedicins.Medicins.Any(m => m.Id == SelectedMedicin.Id))
                 {
                     ModernMessageDialog.Show("Это лекарство уже добавлено в аптечку", "Предупреждение", MessageType.Warning);
                     return;
                 }
 
-                // Загружаем лекарство с контекстом (нужно для many-to-many)
                 var medicin = await _unitOfWork.MedicinRepository.GetByIdAsync(SelectedMedicin.Id);
                 if (medicin == null)
                 {
@@ -265,7 +253,22 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     return;
                 }
 
-                // Добавляем лекарство в аптечку
+                var historyUpMedicin = await _unitOfWork.HistoryUpMedicinRepository.GetByIdAsync(medicin.HistoryUpMId);
+                if (historyUpMedicin == null)
+                {
+                    ModernMessageDialog.Show("История пополнения лекарства не найдена", "Ошибка", MessageType.Error);
+                    return;
+                }
+
+                if (historyUpMedicin.Count <= 0)
+                {
+                    ModernMessageDialog.Show("Нельзя взять лекарство: количество равно 0", "Ошибка", MessageType.Error);
+                    return;
+                }
+
+                historyUpMedicin.Count -= 1;
+                await _unitOfWork.HistoryUpMedicinRepository.UpdateAsync(historyUpMedicin);
+
                 if (medkitWithMedicins.Medicins == null)
                 {
                     medkitWithMedicins.Medicins = new List<Medicin>();
@@ -273,11 +276,9 @@ namespace MedicalAir.ViewModel.FlightAttendant
                 
                 medkitWithMedicins.Medicins.Add(medicin);
 
-                // Используем Update для сохранения изменений в many-to-many связи
                 await _unitOfWork.MedkitRepository.UpdateAsync(medkitWithMedicins);
                 await _unitOfWork.SaveAsync();
 
-                // Перезагружаем аптечку с медикаментами для обновления UI
                 await LoadMedkitMedicinsAsync();
                 await UpdateMedkitValidityAsync();
                 ModernMessageDialog.Show("Лекарство успешно добавлено в аптечку", "Успех", MessageType.Success);
@@ -316,7 +317,6 @@ namespace MedicalAir.ViewModel.FlightAttendant
                 await _unitOfWork.MedkitRepository.UpdateAsync(medkitWithMedicins);
                 await _unitOfWork.SaveAsync();
 
-                // Перезагружаем аптечку с медикаментами для обновления UI
                 await LoadMedkitMedicinsAsync();
                 await UpdateMedkitValidityAsync();
                 ModernMessageDialog.Show("Лекарство успешно удалено из аптечки", "Успех", MessageType.Success);
@@ -381,20 +381,17 @@ namespace MedicalAir.ViewModel.FlightAttendant
                         continue;
                     }
 
-                    // Проверяем условия валидности: все лекарства не просрочены и минимум 5 разных лекарств
                     var validMedicins = medkitWithMedicins.Medicins
                         .Where(m => m.HistoryUpMedicin != null && 
                                    m.HistoryUpMedicin.EndData >= today && 
                                    m.HistoryUpMedicin.IsValid)
                         .ToList();
 
-                    // Подсчитываем уникальные лекарства по HistoryUpMedicinId
                     var uniqueMedicinsCount = validMedicins
                         .Select(m => m.HistoryUpMId)
                         .Distinct()
                         .Count();
 
-                    // Все лекарства должны быть валидными И должно быть минимум 5 разных
                     var isValid = validMedicins.Count == medkitWithMedicins.Medicins.Count && 
                                  uniqueMedicinsCount >= 5;
 

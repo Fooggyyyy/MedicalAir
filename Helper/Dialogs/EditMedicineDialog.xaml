@@ -38,7 +38,6 @@
                        Grid.Row="0"
                        Margin="0,0,0,25"/>
 
-            <!-- Название -->
             <TextBlock Text="Название лекарства:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -64,7 +63,6 @@
                 </TextBox.Style>
             </TextBox>
 
-            <!-- Количество -->
             <TextBlock Text="Количество:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -90,7 +88,6 @@
                 </TextBox.Style>
             </TextBox>
 
-            <!-- Дата пополнения -->
             <TextBlock Text="Дата пополнения:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -116,7 +113,6 @@
                 </DatePicker.Style>
             </DatePicker>
 
-            <!-- Дата окончания -->
             <TextBlock Text="Дата окончания срока:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -142,7 +138,6 @@
                 </DatePicker.Style>
             </DatePicker>
 
-            <!-- Кнопки -->
             <StackPanel Grid.Row="9"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">

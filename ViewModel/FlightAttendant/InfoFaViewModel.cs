@@ -2,11 +2,7 @@
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.FlightAttendant
@@ -85,10 +81,8 @@ namespace MedicalAir.ViewModel.FlightAttendant
                     return;
                 }
 
-                // Загружаем медосмотры пользователя
                 var examinations = await _unitOfWork.MedicalExaminationRepository.GetByUserIdAsync(Session.UserId);
                 
-                // Загружаем процедуры для каждого медосмотра ПЕРЕД установкой MedicalExaminations
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(Session.UserId);
                 if (user != null)
                 {
@@ -109,11 +103,9 @@ namespace MedicalAir.ViewModel.FlightAttendant
                 
                 MedicalExaminations = new ObservableCollection<MedicalExamination>(examinations.OrderByDescending(e => e.DataEnd));
 
-                // Загружаем все процедуры пользователя
                 var userProcedures = await _unitOfWork.UserProcedureRepository.GetByUserIdAsync(Session.UserId);
                 AllUserProcedures = new ObservableCollection<UserProcedure>(userProcedures.OrderByDescending(up => up.EndData));
 
-                // Загружаем сертификаты пользователя
                 var certificatsList = await _unitOfWork.CertificatRepository.GetByUserIdAsync(Session.UserId);
                 Certificats = new ObservableCollection<Certificat>(certificatsList.OrderByDescending(c => c.DataEnd));
             }

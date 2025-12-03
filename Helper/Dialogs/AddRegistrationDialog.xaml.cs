@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using MedicalAir.Model.Entites;
@@ -38,16 +35,14 @@ namespace MedicalAir.Helper.Dialogs
             MessageBody = messageBody ?? "";
             SelectedDate = date;
 
-            // Устанавливаем значения в UI
             UserComboBox.SelectedValue = userId;
             DatePicker.SelectedDate = date;
             MessageTextBox.Text = MessageBody;
 
-            // Обновляем самолеты для выбранного пользователя
             var selectedUser = _users.FirstOrDefault(u => u.Id == userId);
             if (selectedUser != null)
             {
-                // Фильтруем самолеты - показываем только самолет, закрепленный за пользователем
+                
                 if (selectedUser.AirplaneId.HasValue)
                 {
                     var userAirplane = _airplanes.FirstOrDefault(a => a.Id == selectedUser.AirplaneId.Value);
@@ -62,7 +57,7 @@ namespace MedicalAir.Helper.Dialogs
 
         public void SetEditMode()
         {
-            // Изменяем заголовок и текст кнопки для режима редактирования
+            
             var titleTextBlock = this.FindName("TitleTextBlock") as System.Windows.Controls.TextBlock;
             if (titleTextBlock != null)
             {
@@ -80,7 +75,7 @@ namespace MedicalAir.Helper.Dialogs
         {
             if (UserComboBox.SelectedItem is User selectedUser)
             {
-                // Фильтруем самолеты - показываем только самолет, закрепленный за пользователем
+                
                 if (selectedUser.AirplaneId.HasValue)
                 {
                     var userAirplane = _airplanes.FirstOrDefault(a => a.Id == selectedUser.AirplaneId.Value);
@@ -139,4 +134,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

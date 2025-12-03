@@ -1,7 +1,5 @@
-﻿using MedicalAir.DataBase;
-using MedicalAir.DataBase.Repositories.Implementations;
+﻿using MedicalAir.DataBase.Repositories.Implementations;
 using MedicalAir.DataBase.Repositories.Interfaces;
-using System.Threading.Tasks;
 
 namespace MedicalAir.DataBase.UnitOfWork
 {

@@ -1,5 +1,0 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=.;Database=MedicalAir;Trusted_Connection=True;Encrypt=False;"
-  }
-}

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using MedicalAir.Config;
 using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.WindowManager;
@@ -9,9 +8,7 @@ using MedicalAir.ViewModel.Doctor;
 
 namespace MedicalAir.View.Doctor
 {
-    /// <summary>
-    /// Логика взаимодействия для MainDoctorWindow.xaml
-    /// </summary>
+    
     public partial class MainDoctorWindow : Window
     {
         public MainDoctorWindow()
@@ -24,7 +21,7 @@ namespace MedicalAir.View.Doctor
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             Session.UserId = 0;
-            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT; // Сброс роли
+            Session.UserRole = Model.Enums.UserRoles.FLIGHTATTENDAT; 
             WindowManager.ShowAndCloseCurrent(new LoginWindow());
         }
 

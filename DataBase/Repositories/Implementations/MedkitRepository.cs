@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MedicalAir.Model.Entites;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.Repositories.Interfaces;
 
 namespace MedicalAir.DataBase.Repositories.Implementations
@@ -21,22 +20,6 @@ namespace MedicalAir.DataBase.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Medkit>> GetValidAsync()
-        {
-            return await _dbSet
-                .Include(m => m.Airplane)
-                .Where(m => m.IsValid)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Medkit>> GetInvalidAsync()
-        {
-            return await _dbSet
-                .Include(m => m.Airplane)
-                .Where(m => !m.IsValid)
-                .ToListAsync();
-        }
-
         public async Task<Medkit?> GetWithMedicinsAsync(int id)
         {
             return await _dbSet
@@ -48,7 +31,7 @@ namespace MedicalAir.DataBase.Repositories.Implementations
 
         public override Task UpdateAsync(Medkit entity)
         {
-            // Для many-to-many связей нужно явно отслеживать изменения
+            
             var entry = _context.Entry(entity);
             if (entry.State == EntityState.Detached)
             {
@@ -56,7 +39,6 @@ namespace MedicalAir.DataBase.Repositories.Implementations
             }
             entry.State = EntityState.Modified;
             
-            // Отслеживаем изменения в коллекции Medicins для many-to-many связи
             if (entity.Medicins != null)
             {
                 foreach (var medicin in entity.Medicins)
@@ -66,7 +48,7 @@ namespace MedicalAir.DataBase.Repositories.Implementations
                     {
                         _context.Medicins.Attach(medicin);
                     }
-                    // Помечаем связь как добавленную
+                    
                     medicinEntry.State = EntityState.Unchanged;
                 }
             }
@@ -75,4 +57,3 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         }
     }
 }
-

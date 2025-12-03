@@ -2,13 +2,8 @@
 using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
-using MedicalAir.Model.Enums;
 using MedicalAir.Model.Session;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.FlightAttendant
@@ -65,38 +60,36 @@ namespace MedicalAir.ViewModel.FlightAttendant
 
                 var today = DateOnly.FromDateTime(DateTime.Today);
 
-                // Получаем все медосмотры пользователя
                 var examinations = await _unitOfWork.MedicalExaminationRepository.GetByUserIdAsync(Session.UserId);
                 
-                // Получаем все процедуры пользователя
                 var userProcedures = await _unitOfWork.UserProcedureRepository.GetByUserIdAsync(Session.UserId);
 
                 var procedureItems = new List<ProcedureItem>();
 
                 foreach (var examination in examinations)
                 {
-                    // Если медосмотр просрочен, не показываем процедуры
+                    
                     if (examination.DataEnd < today)
                     {
                         continue;
                     }
 
-                    // Находим все UserProcedure для этого медосмотра (с теми же датами)
                     var examinationUserProcedures = userProcedures
                         .Where(up => up.StartData == examination.DataStart && up.EndData == examination.DataEnd)
                         .ToList();
 
-                    // Получаем все процедуры роли пользователя
                     var user = await _unitOfWork.UserRepository.GetByIdAsync(Session.UserId);
                     if (user == null) continue;
 
                     var roleProcedures = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(user.Roles);
 
-                    // Для каждой процедуры роли создаем ProcedureItem
                     foreach (var roleProcedure in roleProcedures)
                     {
+                        
                         var userProcedure = examinationUserProcedures
-                            .FirstOrDefault(up => up.ProcedureId == roleProcedure.ProcedureId);
+                            .FirstOrDefault(up => up.ProcedureId == roleProcedure.ProcedureId && 
+                                                  up.StartData == examination.DataStart && 
+                                                  up.EndData == examination.DataEnd);
 
                         var procedureItem = new ProcedureItem
                         {
@@ -104,9 +97,7 @@ namespace MedicalAir.ViewModel.FlightAttendant
                             UserRoleProcedure = roleProcedure,
                             Procedure = roleProcedure.Procedure,
                             UserProcedure = userProcedure,
-                            // Можно пройти только если процедура еще не пройдена (null или IsValid = false)
-                            // Если процедура уже пройдена (IsValid = true), нельзя перепройти
-                            // Если процедура не пройдена (IsValid = false), тоже нельзя перепройти (уже была попытка)
+                            
                             CanPass = userProcedure == null
                         };
 
@@ -137,12 +128,12 @@ namespace MedicalAir.ViewModel.FlightAttendant
 
                 if (procedure.MustBeTrue)
                 {
-                    // Это тест - просто отмечаем как пройденный
+                    
                     isValid = true;
                 }
                 else
                 {
-                    // Это числовая процедура - открываем модальное окно
+                    
                     var dialog = new Helper.Dialogs.ProcedureInputDialog(
                         procedure.Name ?? "",
                         procedure.Description ?? "",
@@ -150,30 +141,33 @@ namespace MedicalAir.ViewModel.FlightAttendant
                         procedure.MaxValue,
                         procedure.Units ?? "");
 
-                    if (dialog.ShowDialog() == true && dialog.Result.HasValue)
+                    if (dialog.ShowDialog() == true)
                     {
-                        value = dialog.Result.Value;
-                        isValid = value >= procedure.MinValue && value <= procedure.MaxValue;
-                        
-                        // Если значение неверное, просто сохраняем как непройденное без сообщения
-                        if (!isValid)
+                        if (dialog.Result.HasValue)
                         {
-                            // Не показываем сообщение, просто сохраняем как непройденное
+                            value = dialog.Result.Value;
+                            
+                            isValid = value >= procedure.MinValue && value <= procedure.MaxValue;
                         }
+                        else
+                        {
+                            
+                            isValid = false;
+                        }
+                        
                     }
                     else
                     {
-                        return; // Пользователь отменил ввод
+                        return; 
                     }
                 }
 
-                // Используем даты из медосмотра
                 var startDate = procedureItem.Examination.DataStart;
                 var endDate = procedureItem.Examination.DataEnd;
 
                 if (procedureItem.UserProcedure == null)
                 {
-                    // Создаем новую запись
+                    
                     var userProcedure = new UserProcedure(
                         Session.UserId,
                         procedure.Id,
@@ -185,7 +179,7 @@ namespace MedicalAir.ViewModel.FlightAttendant
                 }
                 else
                 {
-                    // Обновляем существующую запись
+                    
                     procedureItem.UserProcedure.StartData = startDate;
                     procedureItem.UserProcedure.EndData = endDate;
                     procedureItem.UserProcedure.IsValid = isValid;
@@ -195,18 +189,15 @@ namespace MedicalAir.ViewModel.FlightAttendant
 
                 await _unitOfWork.SaveAsync();
 
-                // Проверяем, все ли процедуры в медосмотре валидны
                 await UpdateMedicalExaminationValidity(procedureItem.Examination);
 
                 await LoadDataAsync();
 
-                // Показываем сообщение только если процедура пройдена
-                // Если не пройдена - просто сохраняем без сообщения (нельзя перепройти)
                 if (isValid)
                 {
                     ModernMessageDialog.Show("Процедура успешно пройдена", "Успех", MessageType.Success);
                 }
-                // Для непройденных процедур не показываем сообщение - они просто остаются непройденными
+                
             }
             catch (Exception ex)
             {
@@ -218,13 +209,12 @@ namespace MedicalAir.ViewModel.FlightAttendant
         {
             try
             {
-                // Получаем все UserProcedure для этого медосмотра (с теми же датами)
+                
                 var userProcedures = await _unitOfWork.UserProcedureRepository.GetByUserIdAsync(Session.UserId);
                 var examinationProcedures = userProcedures
                     .Where(up => up.StartData == examination.DataStart && up.EndData == examination.DataEnd)
                     .ToList();
 
-                // Если все процедуры медосмотра валидны, то медосмотр тоже валиден
                 var allValid = examinationProcedures.Any() && examinationProcedures.All(up => up.IsValid);
 
                 if (examination.IsValid != allValid)

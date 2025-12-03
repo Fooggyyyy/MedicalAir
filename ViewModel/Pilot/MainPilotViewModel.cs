@@ -4,10 +4,6 @@ using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
 using MedicalAir.Services;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Pilot
@@ -79,7 +75,6 @@ namespace MedicalAir.ViewModel.Pilot
                     return;
                 }
 
-                // Загружаем информацию о пользователе
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(Session.UserId);
                 if (user == null)
                 {
@@ -89,7 +84,6 @@ namespace MedicalAir.ViewModel.Pilot
 
                 CurrentUser = user;
 
-                // Загружаем информацию о самолете
                 if (user.AirplaneId.HasValue)
                 {
                     var airplane = await _unitOfWork.AirplaneRepository.GetByIdAsync(user.AirplaneId.Value);
@@ -107,13 +101,12 @@ namespace MedicalAir.ViewModel.Pilot
                     AirplaneName = "Не назначен";
                 }
 
-                // Загружаем информацию о регистрации
                 var registrations = await _unitOfWork.RegistrationUserRepository.GetByUserIdAsync(Session.UserId);
                 var registrationsList = registrations.ToList();
 
                 if (registrationsList.Any())
                 {
-                    // Берем последнюю регистрацию (самую новую по дате)
+                    
                     var latestRegistration = registrationsList
                         .OrderByDescending(r => r.Data)
                         .ThenByDescending(r => r.Id)
@@ -135,7 +128,6 @@ namespace MedicalAir.ViewModel.Pilot
                     RegistrationStatus = "Не зарегистрирован";
                 }
 
-                // Генерируем автоматические уведомления
                 await _notificationService.GenerateAutomaticNotificationsAsync(Session.UserId);
                 await _unitOfWork.SaveAsync();
             }

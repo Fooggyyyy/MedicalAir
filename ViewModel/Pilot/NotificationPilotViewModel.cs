@@ -3,11 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Pilot
@@ -59,7 +55,7 @@ namespace MedicalAir.ViewModel.Pilot
 
                 if (!Notifications.Any())
                 {
-                    // Не показываем сообщение, просто пустой список
+                    
                 }
             }
             catch (Exception ex)

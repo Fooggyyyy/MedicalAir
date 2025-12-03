@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MedicalAir.Model.Entites;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.Repositories.Interfaces;
 
 namespace MedicalAir.DataBase.Repositories.Implementations
@@ -19,33 +18,5 @@ namespace MedicalAir.DataBase.Repositories.Implementations
                 .Where(up => up.UserId == userId)
                 .ToListAsync();
         }
-
-        public async Task<IEnumerable<UserProcedure>> GetByProcedureIdAsync(int procedureId)
-        {
-            return await _dbSet
-                .Include(up => up.User)
-                .Include(up => up.Procedure)
-                .Where(up => up.ProcedureId == procedureId)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<UserProcedure>> GetValidAsync()
-        {
-            return await _dbSet
-                .Include(up => up.User)
-                .Include(up => up.Procedure)
-                .Where(up => up.IsValid)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<UserProcedure>> GetInvalidAsync()
-        {
-            return await _dbSet
-                .Include(up => up.User)
-                .Include(up => up.Procedure)
-                .Where(up => !up.IsValid)
-                .ToListAsync();
-        }
     }
 }
-

@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -67,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -245,11 +244,10 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <!-- Информация о враче -->
+                    
                     <Border Background="White" Padding="25" Margin="0,0,0,20" CornerRadius="8">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -279,7 +277,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Статистика -->
                     <TextBlock Text="📊 Статистика" FontSize="22" FontWeight="Bold" Foreground="#48bb78" Margin="0,0,0,15"/>
 
                     <Grid>
@@ -293,7 +290,6 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <!-- Сертификаты -->
                         <Border Grid.Row="0" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,15" CornerRadius="8">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -306,7 +302,6 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Медосмотры -->
                         <Border Grid.Row="0" Grid.Column="1" Background="White" Padding="20" Margin="10,0,0,15" CornerRadius="8">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -318,7 +313,6 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Процедуры и лекарства -->
                         <Border Grid.Row="1" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,15" CornerRadius="8">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -339,7 +333,6 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Пользователи -->
                         <Border Grid.Row="2" Grid.Column="0" Background="White" Padding="20" Margin="0,0,10,0" CornerRadius="8">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -351,7 +344,6 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Кнопка обновления -->
                         <Border Grid.Row="2" Grid.Column="1" Background="White" Padding="20" Margin="10,0,0,0" CornerRadius="8">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>

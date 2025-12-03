@@ -21,7 +21,6 @@ namespace MedicalAir.Helper.Dialogs
             MessageTextBlock.Text = message;
             TitleTextBlock.Text = title;
 
-            // Настройка в зависимости от типа сообщения
             switch (type)
             {
                 case MessageType.Success:
@@ -47,7 +46,7 @@ namespace MedicalAir.Helper.Dialogs
                     NoButton.Visibility = Visibility.Visible;
                     OkButton.Visibility = Visibility.Collapsed;
                     break;
-                default: // Info
+                default: 
                     IconTextBlock.Text = "ℹ";
                     IconTextBlock.Foreground = System.Windows.Media.Brushes.Blue;
                     TitleTextBlock.Foreground = System.Windows.Media.Brushes.Blue;
@@ -90,4 +89,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

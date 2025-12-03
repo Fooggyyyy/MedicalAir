@@ -9,11 +9,6 @@ using MedicalAir.View.Admin;
 using MedicalAir.View.Doctor;
 using MedicalAir.View.FlightAttendant;
 using MedicalAir.View.Pilot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -70,7 +65,6 @@ namespace MedicalAir.ViewModel.General
                 return;
             }
 
-            // Проверка на блокировку
             if (user.IsBlocked)
             {
                 ModernMessageDialog.Show("Ваш аккаунт заблокирован. Обратитесь к администратору.", "Аккаунт заблокирован", MessageType.Error);
@@ -83,7 +77,6 @@ namespace MedicalAir.ViewModel.General
                 Session.UserId = user.Id;
                 Session.UserRole = user.Roles;
 
-                // Навигация в зависимости от роли пользователя
                 NavigateToRoleWindow(user.Roles);
             }
             else
@@ -118,10 +111,9 @@ namespace MedicalAir.ViewModel.General
 
             if (targetWindow != null)
             {
-                // Сначала показываем новое окно, затем закрываем старые
+                
                 targetWindow.Show();
                 
-                // Закрываем все окна приложения после открытия главного окна роли
                 var windowsToClose = Application.Current.Windows.OfType<Window>()
                     .Where(w => w != targetWindow && w.IsLoaded)
                     .ToList();

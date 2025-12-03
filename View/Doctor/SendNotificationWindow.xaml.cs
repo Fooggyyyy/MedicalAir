@@ -1,7 +1,6 @@
 using MedicalAir.Config;
 using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.WindowManager;
-using MedicalAir.View.General;
 using MedicalAir.ViewModel.Doctor;
 using System.Windows;
 
@@ -27,4 +26,3 @@ namespace MedicalAir.View.Doctor
         }
     }
 }
-

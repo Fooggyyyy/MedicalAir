@@ -16,7 +16,7 @@
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Window.Resources>
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -71,7 +71,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -249,7 +248,6 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <TabControl BorderThickness="0" Background="Transparent">
                 <TabControl.Resources>
@@ -270,7 +268,6 @@
                     </Style>
                 </TabControl.Resources>
 
-                <!-- Процедуры -->
                 <TabItem Header="🔬 Процедуры">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -296,6 +293,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Название процедуры:" FontSize="12" Foreground="#666" Margin="0,0,10,5"/>
@@ -318,7 +316,7 @@
                                 
                                 <Button Grid.Row="1" Grid.Column="6" Content="➕ Добавить" Command="{Binding AddProcedure}" Width="120" Height="40" Background="#48bb78" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
                                 <Button Grid.Row="1" Grid.Column="7" Content="✏️ Изменить" Command="{Binding UpdateProcedure}" Width="120" Height="40" Background="#667eea" Foreground="White" Margin="0,0,10,0" Cursor="Hand"/>
-                                <Button Grid.Row="1" Grid.Column="8" Content="🗑️ Удалить" Command="{Binding DeleteProcedure}" Width="120" Height="40" Background="#f56565" Foreground="White" Margin="0,0,0,0" Cursor="Hand"/>
+                                <Button Grid.Row="1" Grid.Column="8" Content="🗑️ Удалить" Command="{Binding DeleteProcedure}" Width="120" Height="40" Background="#f56565" Foreground="White" Margin="10,0,0,0" Cursor="Hand"/>
                             </Grid>
                         </Border>
 
@@ -360,7 +358,6 @@
                     </Grid>
                 </TabItem>
 
-                <!-- Назначение процедур ролям -->
                 <TabItem Header="👥 Назначение процедур">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -414,7 +411,6 @@
                     </Grid>
                 </TabItem>
 
-                <!-- Лекарства -->
                 <TabItem Header="💊 Лекарства">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -485,7 +481,6 @@
                     </Grid>
                 </TabItem>
 
-                <!-- Пополнение лекарств -->
                 <TabItem Header="📦 Пополнение лекарств">
                     <Grid>
                         <Grid.RowDefinitions>

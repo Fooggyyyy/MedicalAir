@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using MedicalAir.Config;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Session;
@@ -10,9 +8,7 @@ using MedicalAir.ViewModel.Admin;
 
 namespace MedicalAir.View.Admin
 {
-    /// <summary>
-    /// Логика взаимодействия для ReportWindow.xaml
-    /// </summary>
+    
     public partial class ReportWindow : Window
     {
         public ReportWindow()

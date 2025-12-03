@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -67,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -245,14 +244,12 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Панель фильтров -->
             <Border Grid.Row="0"
                     Background="White"
                     Padding="20"
@@ -321,7 +318,6 @@
                 </Grid>
             </Border>
 
-            <!-- Таблица отчетов по лекарствам -->
             <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -365,4 +361,3 @@
         </Grid>
     </Grid>
 </Window>
-

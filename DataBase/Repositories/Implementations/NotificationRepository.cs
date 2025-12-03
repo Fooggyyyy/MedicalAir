@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MedicalAir.Model.Entites;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.Repositories.Interfaces;
 
 namespace MedicalAir.DataBase.Repositories.Implementations
@@ -13,7 +12,7 @@ namespace MedicalAir.DataBase.Repositories.Implementations
 
         public async Task<IEnumerable<Notification>> GetByUserIdAsync(int userId)
         {
-            // Фильтруем уведомления старше недели
+            
             var weekAgo = DateTime.Now.AddDays(-7);
             return await _dbSet
                 .Include(n => n.User)
@@ -32,4 +31,3 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         }
     }
 }
-

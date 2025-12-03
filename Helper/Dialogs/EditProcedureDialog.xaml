@@ -37,7 +37,6 @@
                        Grid.Row="0"
                        Margin="0,0,0,25"/>
 
-            <!-- Название -->
             <TextBlock Text="Название процедуры:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -63,7 +62,6 @@
                 </TextBox.Style>
             </TextBox>
 
-            <!-- Описание -->
             <TextBlock Text="Описание:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -93,7 +91,6 @@
                 </TextBox.Style>
             </TextBox>
 
-            <!-- Мин/Макс значения и Ед. измерения -->
             <Grid Grid.Row="5" Margin="0,0,0,15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -180,7 +177,6 @@
                 </TextBox>
             </Grid>
 
-            <!-- Тип процедуры -->
             <TextBlock Text="Тип процедуры:"
                        FontSize="14"
                        FontWeight="SemiBold"
@@ -195,7 +191,6 @@
                       Checked="MustBeTrueCheckBox_Checked"
                       Unchecked="MustBeTrueCheckBox_Unchecked"/>
 
-            <!-- Кнопки -->
             <StackPanel Grid.Row="8"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right">

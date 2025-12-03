@@ -3,11 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.FlightAttendant
@@ -56,11 +52,6 @@ namespace MedicalAir.ViewModel.FlightAttendant
 
                 var notificationsList = await _unitOfWork.NotificationRepository.GetByUserIdAsync(Session.UserId);
                 Notifications = new ObservableCollection<Notification>(notificationsList.OrderByDescending(n => n.Id));
-
-                if (!Notifications.Any())
-                {
-                    // Не показываем сообщение, просто пустой список
-                }
             }
             catch (Exception ex)
             {

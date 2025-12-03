@@ -8,4 +8,3 @@ namespace MedicalAir.DataBase.Repositories.Interfaces
         Task<bool> ExistsSimilarAsync(int userId, string messageBody, int daysBack = 1);
     }
 }
-

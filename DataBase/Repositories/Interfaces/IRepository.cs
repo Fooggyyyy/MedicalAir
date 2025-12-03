@@ -14,4 +14,3 @@ namespace MedicalAir.DataBase.Repositories.Interfaces
         Task SaveChangesAsync();
     }
 }
-

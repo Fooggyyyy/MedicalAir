@@ -9,4 +9,3 @@ namespace MedicalAir.DataBase.Repositories.Interfaces
         Task<IEnumerable<User>> GetByAirplaneIdAsync(int airplaneId);
     }
 }
-

@@ -41,4 +41,3 @@ namespace MedicalAir.DataBase.Configuration
         }
     }
 }
-

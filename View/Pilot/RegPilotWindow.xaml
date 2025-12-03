@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -67,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -199,7 +198,6 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

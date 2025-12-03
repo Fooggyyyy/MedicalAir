@@ -2,10 +2,7 @@
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Session;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Pilot
@@ -57,11 +54,9 @@ namespace MedicalAir.ViewModel.Pilot
                     return;
                 }
 
-                // Проверяем, что все актуальные медосмотры пройдены
                 var examinations = await _unitOfWork.MedicalExaminationRepository.GetByUserIdAsync(Session.UserId);
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 
-                // Получаем актуальные медосмотры (не просроченные)
                 var actualExaminations = examinations
                     .Where(e => e.DataEnd >= today)
                     .ToList();
@@ -75,7 +70,6 @@ namespace MedicalAir.ViewModel.Pilot
                     return;
                 }
 
-                // Проходим регистрацию
                 SelectedRegistration.IsRegister = true;
                 await _unitOfWork.RegistrationUserRepository.UpdateAsync(SelectedRegistration);
                 await _unitOfWork.SaveAsync();

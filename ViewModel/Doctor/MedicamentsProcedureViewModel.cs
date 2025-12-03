@@ -3,12 +3,8 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows;
 
 namespace MedicalAir.ViewModel.Doctor
 {
@@ -16,7 +12,6 @@ namespace MedicalAir.ViewModel.Doctor
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        // Процедуры
         private ObservableCollection<Procedure> procedures;
         private ObservableCollection<Procedure> allProcedures;
         public ObservableCollection<Procedure> Procedures
@@ -87,14 +82,13 @@ namespace MedicalAir.ViewModel.Doctor
                 Set(ref mustBeTrue, value);
                 if (value)
                 {
-                    // Если это тест, устанавливаем значения 0-1 и блокируем поля
+                    
                     MinValue = 0;
                     MaxValue = 1;
                 }
             }
         }
 
-        // UserRoleProcedures
         private ObservableCollection<UserRoleProcedure> userRoleProcedures;
         public ObservableCollection<UserRoleProcedure> UserRoleProcedures
         {
@@ -142,7 +136,6 @@ namespace MedicalAir.ViewModel.Doctor
             }
         }
 
-        // Лекарства (Medicin)
         private ObservableCollection<Medicin> medicins;
         private ObservableCollection<Medicin> allMedicins;
         public ObservableCollection<Medicin> Medicins
@@ -183,7 +176,6 @@ namespace MedicalAir.ViewModel.Doctor
             set => Set(ref medicinComposition, value);
         }
 
-        // Пополнение лекарств
         private ObservableCollection<HistoryUpMedicin> historyUpMedicins;
         private ObservableCollection<HistoryUpMedicin> allHistoryUpMedicins;
         public ObservableCollection<HistoryUpMedicin> HistoryUpMedicins
@@ -254,7 +246,6 @@ namespace MedicalAir.ViewModel.Doctor
         public ICommand ClearSearchMedicins { get; set; }
         public ICommand ClearSearchHistoryMedicines { get; set; }
         public ICommand AddSingleUserRoleProcedure { get; set; }
-
 
         public MedicamentsProcedureViewModel(IUnitOfWork unitOfWork)
         {
@@ -362,7 +353,7 @@ namespace MedicalAir.ViewModel.Doctor
                 UserRoleProcedures = new ObservableCollection<UserRoleProcedure>(userRoleProceduresList);
 
                 var medicinsList = await _unitOfWork.MedicinRepository.GetAllAsync();
-                // Группируем по названию и берем первое лекарство из каждой группы (уникальные лекарства)
+                
                 var uniqueMedicins = medicinsList
                     .GroupBy(m => m.Name)
                     .Select(g => g.First())
@@ -420,7 +411,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Открываем диалоговое окно для редактирования
                 var dialog = new Helper.Dialogs.EditProcedureDialog(SelectedProcedure);
                 if (dialog.ShowDialog() == true)
                 {
@@ -482,7 +472,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Проверяем, не назначена ли уже эта процедура для этой роли
                 var existingProceduresForRole = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(SelectedRole);
                 var exists = existingProceduresForRole.Any(urp => urp.ProcedureId == SelectedProcedureForRole.Id);
 
@@ -514,14 +503,11 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Получаем все процедуры
                 var allProcedures = await _unitOfWork.ProcedureRepository.GetAllAsync();
                 
-                // Получаем уже назначенные процедуры для этой роли
                 var existingProceduresForRole = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(SelectedRole);
                 var existingProcedureIds = existingProceduresForRole.Select(urp => urp.ProcedureId).ToList();
 
-                // Назначаем все процедуры, которые еще не назначены
                 int addedCount = 0;
                 foreach (var procedure in allProcedures)
                 {
@@ -587,7 +573,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Проверяем, не существует ли уже лекарство с таким названием
                 var existingMedicin = await _unitOfWork.MedicinRepository.GetByNameAsync(MedicinName);
                 if (existingMedicin != null)
                 {
@@ -595,18 +580,15 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Создаем временную запись истории для нового лекарства (с нулевым количеством)
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 var tempHistory = new HistoryUpMedicin(0, MedicinName, today, today, true);
                 await _unitOfWork.HistoryUpMedicinRepository.AddAsync(tempHistory);
                 await _unitOfWork.SaveAsync();
 
-                // Создаем лекарство, связанное с этой записью истории
                 var medicin = new Medicin(tempHistory.Id, MedicinName, MedicinComposition);
                 await _unitOfWork.MedicinRepository.AddAsync(medicin);
                 await _unitOfWork.SaveAsync();
 
-                // Очищаем поля
                 MedicinName = "";
                 MedicinComposition = "";
 
@@ -629,39 +611,30 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                if (string.IsNullOrWhiteSpace(MedicinName))
+                var dialog = new Helper.Dialogs.EditMedicinDialog(SelectedMedicin);
+                if (dialog.ShowDialog() == true)
                 {
-                    ModernMessageDialog.Show("Введите название лекарства", "Предупреждение", MessageType.Warning);
-                    return;
+                    
+                    var existingMedicin = await _unitOfWork.MedicinRepository.GetByNameAsync(dialog.MedicineName);
+                    if (existingMedicin != null && existingMedicin.Id != SelectedMedicin.Id)
+                    {
+                        ModernMessageDialog.Show("Лекарство с таким названием уже существует", "Ошибка", MessageType.Error);
+                        return;
+                    }
+
+                    SelectedMedicin.Name = dialog.MedicineName;
+                    SelectedMedicin.Composition = dialog.MedicineComposition;
+
+                    await _unitOfWork.MedicinRepository.UpdateAsync(SelectedMedicin);
+                    await _unitOfWork.SaveAsync();
+
+                    MedicinName = "";
+                    MedicinComposition = "";
+                    SelectedMedicin = null;
+
+                    await LoadDataAsync();
+                    ModernMessageDialog.Show("Лекарство успешно обновлено", "Успех", MessageType.Success);
                 }
-
-                if (string.IsNullOrWhiteSpace(MedicinComposition))
-                {
-                    ModernMessageDialog.Show("Введите состав лекарства", "Предупреждение", MessageType.Warning);
-                    return;
-                }
-
-                // Проверяем, не существует ли уже лекарство с таким названием (кроме текущего)
-                var existingMedicin = await _unitOfWork.MedicinRepository.GetByNameAsync(MedicinName);
-                if (existingMedicin != null && existingMedicin.Id != SelectedMedicin.Id)
-                {
-                    ModernMessageDialog.Show("Лекарство с таким названием уже существует", "Ошибка", MessageType.Error);
-                    return;
-                }
-
-                SelectedMedicin.Name = MedicinName;
-                SelectedMedicin.Composition = MedicinComposition;
-
-                await _unitOfWork.MedicinRepository.UpdateAsync(SelectedMedicin);
-                await _unitOfWork.SaveAsync();
-
-                // Очищаем поля
-                MedicinName = "";
-                MedicinComposition = "";
-                SelectedMedicin = null;
-
-                await LoadDataAsync();
-                ModernMessageDialog.Show("Лекарство успешно обновлено", "Успех", MessageType.Success);
             }
             catch (Exception ex)
             {
@@ -727,7 +700,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var upDate = DateOnly.FromDateTime(UpData.Value.Date);
                 var endDate = DateOnly.FromDateTime(EndData.Value.Date);
                 
-                // Проверка: дата добавления не должна быть позже 7 дней от настоящего
                 var maxUpDate = today.AddDays(7);
                 if (upDate > maxUpDate)
                 {
@@ -737,17 +709,14 @@ namespace MedicalAir.ViewModel.Doctor
 
                 var isValid = endDate >= today;
 
-                // Создаем новую запись истории пополнения
                 var historyUpMedicin = new HistoryUpMedicin(Count, SelectedMedicinForReplenishment.Name, upDate, endDate, isValid);
                 await _unitOfWork.HistoryUpMedicinRepository.AddAsync(historyUpMedicin);
                 await _unitOfWork.SaveAsync();
 
-                // Создаем новое лекарство, связанное с этой записью истории
                 var newMedicin = new Medicin(historyUpMedicin.Id, SelectedMedicinForReplenishment.Name, SelectedMedicinForReplenishment.Composition);
                 await _unitOfWork.MedicinRepository.AddAsync(newMedicin);
                 await _unitOfWork.SaveAsync();
 
-                // Очищаем поля
                 SelectedMedicinForReplenishment = null;
                 Count = 0;
                 UpData = null;
@@ -772,7 +741,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Открываем диалоговое окно для редактирования
                 var dialog = new Helper.Dialogs.EditMedicineDialog(SelectedHistoryUpMedicin);
                 if (dialog.ShowDialog() == true)
                 {

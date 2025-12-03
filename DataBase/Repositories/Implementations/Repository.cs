@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.Repositories.Interfaces;
 
 namespace MedicalAir.DataBase.Repositories.Implementations
@@ -64,4 +63,3 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         }
     }
 }
-

@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -67,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -222,14 +221,12 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Панель управления -->
             <Border Grid.Row="0" Background="White" Padding="20" Margin="0,0,0,20" CornerRadius="8">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -251,14 +248,12 @@
                 </Grid>
             </Border>
 
-            <!-- Таблицы аптечек и лекарств -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Аптечки -->
                 <Border Grid.Column="0" Background="White" Padding="15" Margin="0,0,10,0" CornerRadius="8">
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -281,14 +276,12 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Лекарства в выбранной аптечке и доступные лекарства -->
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Лекарства в аптечке -->
                     <Border Grid.Row="0" Background="White" Padding="15" Margin="0,0,0,10" CornerRadius="8">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>
@@ -314,7 +307,6 @@
                         </StackPanel>
                     </Border>
 
-                    <!-- Доступные лекарства -->
                     <Border Grid.Row="1" Background="White" Padding="15" CornerRadius="8">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.1"/>

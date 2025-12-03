@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">
     <Grid>
-        <!-- Фоновый градиент -->
+        
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#667eea" Offset="0"/>
@@ -19,7 +19,6 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <!-- Основной контент -->
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
             <Border Background="White"
                     CornerRadius="15"
@@ -32,7 +31,7 @@
                 </Border.Effect>
                 
                 <StackPanel>
-                    <!-- Заголовок -->
+                    
                     <TextBlock Text="MedicalAir"
                                FontSize="32"
                                FontWeight="Bold"
@@ -46,7 +45,6 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,30"/>
 
-                    <!-- Email -->
                     <TextBlock Text="Email"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -70,7 +68,6 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <!-- Пароль -->
                     <TextBlock Text="Пароль"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -95,7 +92,6 @@
                         </PasswordBox.Style>
                     </PasswordBox>
 
-                    <!-- Кнопка входа -->
                     <Button Content="Войти"
                             Command="{Binding LoginCommand}"
                             FontSize="16"
@@ -121,7 +117,6 @@
                         </Button.Style>
                     </Button>
 
-                    <!-- Ссылка на регистрацию -->
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
                         <TextBlock Text="Нет аккаунта? "

@@ -43,4 +43,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

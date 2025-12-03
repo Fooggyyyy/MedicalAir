@@ -3,10 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Doctor
@@ -125,14 +122,22 @@ namespace MedicalAir.ViewModel.Doctor
             try
             {
                 var certificatsList = await _unitOfWork.CertificatRepository.GetAllAsync();
-                allCertificats = new ObservableCollection<Certificat>(certificatsList.OrderByDescending(c => c.DataEnd));
+                
+                allCertificats = new ObservableCollection<Certificat>(
+                    certificatsList
+                        .Where(c => c.User != null && 
+                                   (c.User.Roles == UserRoles.PILOT || c.User.Roles == UserRoles.FLIGHTATTENDAT))
+                        .OrderByDescending(c => c.DataEnd));
                 FilterCertificats();
 
-                var pilots = await _unitOfWork.UserRepository.GetByRoleAsync(UserRoles.PILOT);
-                var flightAttendants = await _unitOfWork.UserRepository.GetByRoleAsync(UserRoles.FLIGHTATTENDAT);
+                var allUsersFromDb = await _unitOfWork.UserRepository.GetAllAsync();
                 
-                var allUsers = pilots.Concat(flightAttendants).ToList();
-                PilotsAndAttendants = new ObservableCollection<User>(allUsers);
+                var filteredUsers = allUsersFromDb
+                    .Where(u => u.Roles == UserRoles.PILOT || u.Roles == UserRoles.FLIGHTATTENDAT)
+                    .Where(u => u.Roles != UserRoles.ADMIN && u.Roles != UserRoles.DOCTOR)
+                    .ToList();
+                
+                PilotsAndAttendants = new ObservableCollection<User>(filteredUsers);
             }
             catch (Exception ex)
             {
@@ -150,7 +155,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Проверяем, прошел ли пользователь медосмотр
                 var userExaminations = await _unitOfWork.MedicalExaminationRepository.GetByUserIdAsync(SelectedUser.Id);
                 var hasValidExamination = userExaminations.Any(e => e.IsValid);
                 
@@ -198,29 +202,20 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                if (!DataStart.HasValue || !DataEnd.HasValue)
+                var dialog = new Helper.Dialogs.EditCertificatDialog(SelectedCertificat);
+                if (dialog.ShowDialog() == true)
                 {
-                    ModernMessageDialog.Show("Выберите даты начала и окончания", "Предупреждение", MessageType.Warning);
-                    return;
+                    SelectedCertificat.DataStart = DateOnly.FromDateTime(dialog.DataStart.Value.Date);
+                    SelectedCertificat.DataEnd = DateOnly.FromDateTime(dialog.DataEnd.Value.Date);
+                    
+                    await UpdateCertificatStatus(SelectedCertificat);
+                    
+                    await _unitOfWork.CertificatRepository.UpdateAsync(SelectedCertificat);
+                    await _unitOfWork.SaveAsync();
+
+                    await LoadDataAsync();
+                    ModernMessageDialog.Show("Сертификат успешно обновлен", "Успех", MessageType.Success);
                 }
-
-                if (DataStart.Value > DataEnd.Value)
-                {
-                    ModernMessageDialog.Show("Дата начала не может быть позже даты окончания", "Ошибка", MessageType.Error);
-                    return;
-                }
-
-                SelectedCertificat.DataStart = DateOnly.FromDateTime(DataStart.Value.Date);
-                SelectedCertificat.DataEnd = DateOnly.FromDateTime(DataEnd.Value.Date);
-                
-                // Обновляем статус
-                await UpdateCertificatStatus(SelectedCertificat);
-                
-                await _unitOfWork.CertificatRepository.UpdateAsync(SelectedCertificat);
-                await _unitOfWork.SaveAsync();
-
-                await LoadDataAsync();
-                ModernMessageDialog.Show("Сертификат успешно обновлен", "Успех", MessageType.Success);
             }
             catch (Exception ex)
             {

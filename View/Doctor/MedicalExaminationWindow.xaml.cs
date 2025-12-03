@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Entites;
@@ -8,9 +7,7 @@ using MedicalAir.View.General;
 
 namespace MedicalAir.View.Doctor
 {
-    /// <summary>
-    /// Логика взаимодействия для MedicalExaminationWindow.xaml
-    /// </summary>
+    
     public partial class MedicalExaminationWindow : Window
     {
         public MedicalExaminationWindow()

@@ -1,14 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MedicalAir.Helper.Commands;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.Helper.ViewModelBase
@@ -71,6 +66,5 @@ namespace MedicalAir.Helper.ViewModelBase
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
     }
-
 
 }

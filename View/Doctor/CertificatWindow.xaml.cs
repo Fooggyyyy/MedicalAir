@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MedicalAir.Config;
 using MedicalAir.DataBase.UnitOfWork;
@@ -10,9 +9,7 @@ using MedicalAir.ViewModel.Doctor;
 
 namespace MedicalAir.View.Doctor
 {
-    /// <summary>
-    /// Логика взаимодействия для CertificatWindow.xaml
-    /// </summary>
+    
     public partial class CertificatWindow : Window
     {
         public CertificatWindow()

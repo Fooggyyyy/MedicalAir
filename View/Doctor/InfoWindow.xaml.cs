@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Entites;
@@ -8,9 +7,7 @@ using MedicalAir.View.General;
 
 namespace MedicalAir.View.Doctor
 {
-    /// <summary>
-    /// Логика взаимодействия для InfoWindow.xaml
-    /// </summary>
+    
     public partial class InfoWindow : Window
     {
         public InfoWindow()

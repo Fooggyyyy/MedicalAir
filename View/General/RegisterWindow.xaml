@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F5F5F5">
     <Grid>
-        <!-- Фоновый градиент -->
+        
         <Grid.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#f093fb" Offset="0"/>
@@ -19,7 +19,6 @@
             </LinearGradientBrush>
         </Grid.Background>
 
-        <!-- Основной контент -->
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
             <Border Background="White"
                     CornerRadius="15"
@@ -32,7 +31,7 @@
                 </Border.Effect>
                 
                 <StackPanel>
-                    <!-- Заголовок -->
+                    
                     <TextBlock Text="Регистрация"
                                FontSize="32"
                                FontWeight="Bold"
@@ -46,18 +45,19 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,30"/>
 
-                    <!-- ФИО -->
                     <TextBlock Text="ФИО"
                                FontSize="14"
                                FontWeight="SemiBold"
                                Foreground="#333"
                                Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox x:Name="FullNameTextBox"
+                             Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}"
                              FontSize="14"
                              Padding="12,10"
                              BorderBrush="#ddd"
                              BorderThickness="1"
-                             Margin="0,0,0,15">
+                             Margin="0,0,0,15"
+                             PreviewTextInput="FullNameTextBox_PreviewTextInput">
                         <TextBox.Style>
                             <Style TargetType="TextBox">
                                 <Setter Property="BorderBrush" Value="#ddd"/>
@@ -70,7 +70,6 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <!-- Email -->
                     <TextBlock Text="Email"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -94,7 +93,6 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <!-- Пароль -->
                     <TextBlock Text="Пароль"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -119,7 +117,6 @@
                         </PasswordBox.Style>
                     </PasswordBox>
 
-                    <!-- Роль -->
                     <TextBlock Text="Роль"
                                FontSize="14"
                                FontWeight="SemiBold"
@@ -144,7 +141,6 @@
                         </ComboBox.Style>
                     </ComboBox>
 
-                    <!-- Кнопка регистрации -->
                     <Button Content="Зарегистрироваться"
                             Command="{Binding RegisterCommand}"
                             FontSize="16"
@@ -170,7 +166,6 @@
                         </Button.Style>
                     </Button>
 
-                    <!-- Ссылка на вход -->
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center">
                         <TextBlock Text="Уже есть аккаунт? "

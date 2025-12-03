@@ -1,20 +1,9 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
-using MedicalAir.DataBase.UnitOfWork;
-using MedicalAir.Helper.Commands;
+﻿using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.HashPassword;
 using MedicalAir.Helper.Validators.General;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Enums;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.General

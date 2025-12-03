@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -27,25 +26,19 @@ namespace MedicalAir.Helper.Dialogs
         {
             if (DataContext is ProcedureInputViewModel vm)
             {
+                
                 if (double.TryParse(vm.Value, out double value))
                 {
-                    if (value >= vm.MinValue && value <= vm.MaxValue)
-                    {
-                        Result = value;
-                        DialogResult = true;
-                        Close();
-                    }
-                    else
-                    {
-                        ModernMessageDialog.Show(
-                            $"Значение должно быть в диапазоне от {vm.MinValue} до {vm.MaxValue} {(string.IsNullOrEmpty(vm.Units) ? "" : vm.Units)}",
-                            "Ошибка",
-                            MessageType.Error);
-                    }
+                    Result = value;
+                    DialogResult = true;
+                    Close();
                 }
                 else
                 {
-                    ModernMessageDialog.Show("Введите корректное числовое значение", "Ошибка", MessageType.Error);
+                    
+                    Result = null;
+                    DialogResult = true;
+                    Close();
                 }
             }
         }
@@ -107,4 +100,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

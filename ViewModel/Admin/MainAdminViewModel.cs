@@ -2,13 +2,7 @@
 using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Admin
@@ -17,7 +11,6 @@ namespace MedicalAir.ViewModel.Admin
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        //On registers
         private int newId;
         public int NewId
         {
@@ -52,8 +45,6 @@ namespace MedicalAir.ViewModel.Admin
             get => newData;
             set => Set(ref newData, value);
         }
-
-        //
 
         private ObservableCollection<RegistrationUser> registrationUsers;
         private ObservableCollection<RegistrationUser> allRegistrationUsers;
@@ -247,7 +238,6 @@ namespace MedicalAir.ViewModel.Admin
                 var usersList = await _unitOfWork.UserRepository.GetAllAsync();
                 var registersList = await _unitOfWork.RegistrationUserRepository.GetAllAsync();
 
-                // Фильтруем админов из списка пользователей
                 var filteredUsers = usersList.Where(u => u.Roles != Model.Enums.UserRoles.ADMIN).ToList();
 
                 allRegistrationUsers = new ObservableCollection<RegistrationUser>(registersList);
@@ -380,9 +370,8 @@ namespace MedicalAir.ViewModel.Admin
                 {
                     var selectedDate = DateOnly.FromDateTime(dialog.SelectedDate);
                     var today = DateOnly.FromDateTime(DateTime.Now);
-                    var minDate = today.AddDays(7); // Минимум на неделю позже текущей даты
+                    var minDate = today.AddDays(7); 
                     
-                    // Проверка: регистрация должна быть минимум на неделю позже текущей даты
                     if (selectedDate < minDate)
                     {
                         ModernMessageDialog.Show(
@@ -391,7 +380,6 @@ namespace MedicalAir.ViewModel.Admin
                         return;
                     }
 
-                    // Проверка: не может быть две регистрации для пользователя с периодичностью меньше недели
                     var existingRegistrations = await _unitOfWork.RegistrationUserRepository.GetByUserIdAsync(dialog.SelectedUserId);
                     var existingRegistrationsList = existingRegistrations.ToList();
                     
@@ -457,7 +445,6 @@ namespace MedicalAir.ViewModel.Admin
             }
         }
 
-
         private async Task EditRegisterToUserAsync()
         {
             try
@@ -468,26 +455,22 @@ namespace MedicalAir.ViewModel.Admin
                     return;
                 }
 
-                // Используем диалог для редактирования
                 var dialog = new Helper.Dialogs.AddRegistrationDialog(Users, Airplanes);
                 
-                // Устанавливаем текущие значения в диалог
                 dialog.SetValues(
                     SelectedRegistr.UserId,
                     SelectedRegistr.AirplaneId,
                     SelectedRegistr.MessageBody,
                     SelectedRegistr.Data.ToDateTime(TimeOnly.MinValue));
                 
-                // Переключаем в режим редактирования
                 dialog.SetEditMode();
 
                 if (dialog.ShowDialog() == true)
                 {
                     var selectedDate = DateOnly.FromDateTime(dialog.SelectedDate);
                     var today = DateOnly.FromDateTime(DateTime.Now);
-                    var minDate = today.AddDays(7); // Минимум на неделю позже текущей даты
+                    var minDate = today.AddDays(7); 
                     
-                    // Проверка: регистрация должна быть минимум на неделю позже текущей даты
                     if (selectedDate < minDate)
                     {
                         ModernMessageDialog.Show(
@@ -496,9 +479,8 @@ namespace MedicalAir.ViewModel.Admin
                         return;
                     }
 
-                    // Проверка: не может быть две регистрации для пользователя с периодичностью меньше недели
                     var existingRegistrations = await _unitOfWork.RegistrationUserRepository.GetByUserIdAsync(dialog.SelectedUserId);
-                    var existingRegistrationsList = existingRegistrations.Where(r => r.Id != SelectedRegistr.Id).ToList(); // Исключаем текущую регистрацию
+                    var existingRegistrationsList = existingRegistrations.Where(r => r.Id != SelectedRegistr.Id).ToList(); 
                     
                     foreach (var existingReg in existingRegistrationsList)
                     {
@@ -558,7 +540,6 @@ namespace MedicalAir.ViewModel.Admin
 
                     await LoadDataAsync();
                     
-                    // Восстанавливаем выбранного пользователя после перезагрузки
                     SelectedUser = Users.FirstOrDefault(u => u.Id == userId);
                     
                     var status = newBlockStatus ? "заблокирован" : "разблокирован";

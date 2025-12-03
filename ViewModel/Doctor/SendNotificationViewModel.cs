@@ -3,10 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Doctor
@@ -150,7 +147,6 @@ namespace MedicalAir.ViewModel.Doctor
 
                 ModernMessageDialog.Show($"Уведомление успешно отправлено {sentCount} получателю(ям)", "Успех", MessageType.Success);
                 
-                // Очищаем форму
                 MessageBody = "";
                 SelectedPilot = null;
                 SelectedFlightAttendant = null;
@@ -164,4 +160,3 @@ namespace MedicalAir.ViewModel.Doctor
         }
     }
 }
-

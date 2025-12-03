@@ -1,14 +1,11 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using MedicalAir.Helper.WindowManager;
 using MedicalAir.Model.Session;
 using MedicalAir.View.General;
 
 namespace MedicalAir.View.FlightAttendant
 {
-    /// <summary>
-    /// Логика взаимодействия для ProcedureFaWindow.xaml
-    /// </summary>
+    
     public partial class ProcedureFaWindow : Window
     {
         public ProcedureFaWindow()

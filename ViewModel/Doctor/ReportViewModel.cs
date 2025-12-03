@@ -2,10 +2,7 @@ using MedicalAir.DataBase.UnitOfWork;
 using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Doctor
@@ -49,7 +46,6 @@ namespace MedicalAir.ViewModel.Doctor
             _unitOfWork = unitOfWork;
             ReportMedicins = new ObservableCollection<ReportMedicin>();
 
-            // Устанавливаем значения по умолчанию (последние 30 дней)
             DateStart = DateTime.Now.AddDays(-30);
             DateEnd = DateTime.Now;
 
@@ -75,7 +71,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var startDate = DateOnly.FromDateTime(DateStart.Value.Date);
                 var endDate = DateOnly.FromDateTime(DateEnd.Value.Date);
 
-                // Генерируем отчет на основе данных за период
                 await GenerateReportAsync(startDate, endDate);
             }
             catch (Exception ex)
@@ -88,22 +83,19 @@ namespace MedicalAir.ViewModel.Doctor
         {
             try
             {
-                // Получаем все лекарства
+                
                 var allMedicins = await _unitOfWork.MedicinRepository.GetAllAsync();
                 var allHistory = await _unitOfWork.HistoryUpMedicinRepository.GetAllAsync();
                 var allMedkits = await _unitOfWork.MedkitRepository.GetAllAsync();
 
-                // Фильтруем лекарства - все что попадает в период (дата пополнения в диапазоне)
                 var medicinsInRange = allHistory
                     .Where(h => h.UpData >= startDate && h.UpData <= endDate)
                     .ToList();
 
-                // Также учитываем лекарства, которые были актуальны в этот период (дата окончания в диапазоне или пересекается)
                 var medicinsActiveInRange = allHistory
                     .Where(h => (h.UpData <= endDate && h.EndData >= startDate))
                     .ToList();
 
-                // Объединяем и убираем дубликаты
                 var allMedicinsInPeriod = medicinsActiveInRange
                     .GroupBy(m => m.Id)
                     .Select(g => g.First())
@@ -120,7 +112,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 var weekFromNow = today.AddDays(7);
 
-                // Подсчитываем статистику
                 var totalMedicines = allMedicinsInPeriod.Sum(m => m.Count);
                 var totalUniqueMedicines = allMedicinsInPeriod.Select(m => m.Name).Distinct().Count();
                 var totalMedkit = allMedkits.Count();
@@ -131,7 +122,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var expiredCountPercent = allMedicinsInPeriod.Count > 0 ? (expiredCount * 100) / allMedicinsInPeriod.Count : 0;
                 var almostExpiredCountPercent = allMedicinsInPeriod.Count > 0 ? (almostExpiredCount * 100) / allMedicinsInPeriod.Count : 0;
 
-                // Создаем отчет
                 var report = new ReportMedicin(
                     startDate,
                     endDate,
@@ -144,11 +134,9 @@ namespace MedicalAir.ViewModel.Doctor
                     almostExpiredCountPercent
                 );
 
-                // Сохраняем отчет в БД
                 await _unitOfWork.ReportMedicinRepository.AddAsync(report);
                 await _unitOfWork.SaveAsync();
 
-                // Загружаем все отчеты за период
                 var reports = await _unitOfWork.ReportMedicinRepository.GetByDateRangeAsync(startDate, endDate);
                 ReportMedicins = new ObservableCollection<ReportMedicin>(reports.OrderByDescending(r => r.DataEnd));
 
@@ -161,4 +149,3 @@ namespace MedicalAir.ViewModel.Doctor
         }
     }
 }
-

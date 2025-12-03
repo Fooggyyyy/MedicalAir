@@ -4,9 +4,6 @@ using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
 using MedicalAir.Model.Session;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Doctor
@@ -108,7 +105,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Загружаем информацию о враче
                 var user = await _unitOfWork.UserRepository.GetByIdAsync(Session.UserId);
                 if (user == null)
                 {
@@ -118,26 +114,21 @@ namespace MedicalAir.ViewModel.Doctor
 
                 CurrentUser = user;
 
-                // Загружаем статистику по сертификатам
                 var allCertificats = await _unitOfWork.CertificatRepository.GetAllAsync();
                 ActiveCertificatsCount = allCertificats.Count(c => c.Status == CertificatStatus.ACTIVE);
                 ExpiredCertificatsCount = allCertificats.Count(c => c.Status == CertificatStatus.EXPIRED);
                 AlmostExpiredCertificatsCount = allCertificats.Count(c => c.Status == CertificatStatus.ALMOSTEXPIRED);
 
-                // Загружаем статистику по медосмотрам
                 var allExaminations = await _unitOfWork.MedicalExaminationRepository.GetAllAsync();
                 ValidExaminationsCount = allExaminations.Count(e => e.IsValid);
                 InvalidExaminationsCount = allExaminations.Count(e => !e.IsValid);
 
-                // Загружаем статистику по процедурам
                 var allProcedures = await _unitOfWork.ProcedureRepository.GetAllAsync();
                 ProceduresCount = allProcedures.Count();
 
-                // Загружаем статистику по лекарствам
                 var allMedicines = await _unitOfWork.HistoryUpMedicinRepository.GetAllAsync();
                 MedicinesCount = allMedicines.Count();
 
-                // Загружаем статистику по пользователям
                 var pilots = await _unitOfWork.UserRepository.GetByRoleAsync(UserRoles.PILOT);
                 PilotsCount = pilots.Count();
 

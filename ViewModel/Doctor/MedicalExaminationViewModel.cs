@@ -3,11 +3,7 @@ using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Doctor
@@ -18,14 +14,13 @@ namespace MedicalAir.ViewModel.Doctor
 
         private ObservableCollection<MedicalExamination> medicalExaminations;
         private ObservableCollection<MedicalExamination> allMedicalExaminations;
-        private Dictionary<int, string> examinationProceduresMap; // Словарь для хранения процедур каждого медосмотра
+        private Dictionary<int, string> examinationProceduresMap; 
         public ObservableCollection<MedicalExamination> MedicalExaminations
         {
             get => medicalExaminations;
             set => Set(ref medicalExaminations, value);
         }
 
-        // Метод для получения строки процедур для медосмотра
         public string GetProceduresForExamination(MedicalExamination examination)
         {
             if (examination == null || examinationProceduresMap == null)
@@ -102,7 +97,6 @@ namespace MedicalAir.ViewModel.Doctor
             set => Set(ref dataEnd, value);
         }
 
-
         private string message;
         public string Message
         {
@@ -161,15 +155,21 @@ namespace MedicalAir.ViewModel.Doctor
             try
             {
                 var examinationsList = await _unitOfWork.MedicalExaminationRepository.GetAllAsync();
-                allMedicalExaminations = new ObservableCollection<MedicalExamination>(examinationsList.OrderByDescending(e => e.DataEnd));
                 
-                // Загружаем процедуры для каждого медосмотра
+                var filteredExaminations = examinationsList
+                    .Where(e => e.User != null && 
+                               (e.User.Roles == UserRoles.PILOT || e.User.Roles == UserRoles.FLIGHTATTENDAT))
+                    .OrderByDescending(e => e.DataEnd)
+                    .ToList();
+                
+                allMedicalExaminations = new ObservableCollection<MedicalExamination>(filteredExaminations);
+                
                 examinationProceduresMap.Clear();
                 foreach (var examination in allMedicalExaminations)
                 {
                     if (examination.User != null)
                     {
-                        // Получаем все процедуры роли пользователя
+                        
                         var roleProcedures = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(examination.User.Roles);
                         var procedureNames = roleProcedures
                             .Where(rp => rp.Procedure != null)
@@ -183,14 +183,14 @@ namespace MedicalAir.ViewModel.Doctor
                 
                 FilterExaminations();
 
-                var pilots = await _unitOfWork.UserRepository.GetByRoleAsync(UserRoles.PILOT);
-                var flightAttendants = await _unitOfWork.UserRepository.GetByRoleAsync(UserRoles.FLIGHTATTENDAT);
+                var allUsersFromDb = await _unitOfWork.UserRepository.GetAllAsync();
                 
-                // Фильтруем только пилотов и бортпроводников (исключаем админов и врачей)
-                var allUsers = pilots.Concat(flightAttendants)
+                var filteredUsers = allUsersFromDb
                     .Where(u => u.Roles == UserRoles.PILOT || u.Roles == UserRoles.FLIGHTATTENDAT)
+                    .Where(u => u.Roles != UserRoles.ADMIN && u.Roles != UserRoles.DOCTOR)
                     .ToList();
-                PilotsAndAttendants = new ObservableCollection<User>(allUsers);
+                
+                PilotsAndAttendants = new ObservableCollection<User>(filteredUsers);
             }
             catch (Exception ex)
             {
@@ -212,7 +212,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var procedures = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(SelectedUser.Roles);
                 UserRoleProcedures = new ObservableCollection<UserRoleProcedure>(procedures);
                 
-                // Автоматически выбираем первую процедуру
                 if (UserRoleProcedures.Any())
                 {
                     SelectedUserRoleProcedure = UserRoleProcedures.First();
@@ -250,7 +249,6 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Получаем все процедуры для роли пользователя
                 var userRoleProcedures = await _unitOfWork.RoleProcedureRepository.GetByRoleAsync(SelectedUser.Roles);
                 
                 if (!userRoleProcedures.Any())
@@ -262,7 +260,6 @@ namespace MedicalAir.ViewModel.Doctor
                 var startDate = DateOnly.FromDateTime(DataStart.Value.Date);
                 var endDate = DateOnly.FromDateTime(DataEnd.Value.Date);
 
-                // Проверяем, не существует ли уже медосмотр для этого пользователя с такими же датами
                 var existingExaminations = await _unitOfWork.MedicalExaminationRepository.GetByUserIdAsync(SelectedUser.Id);
                 var exists = existingExaminations.Any(e => e.DataStart == startDate && e.DataEnd == endDate);
                 
@@ -272,30 +269,11 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                // Создаем один медосмотр для первой процедуры роли (как основной)
                 var firstProcedure = userRoleProcedures.First();
                 var examination = new MedicalExamination(SelectedUser.Id, firstProcedure.Id, startDate, endDate, false, Message);
                 await _unitOfWork.MedicalExaminationRepository.AddAsync(examination);
                 await _unitOfWork.SaveAsync();
 
-                // Создаем UserProcedure для всех процедур роли с теми же датами
-                // Медосмотр будет считаться пройденным, если все UserProcedure валидны
-                foreach (var userRoleProcedure in userRoleProcedures)
-                {
-                    // Проверяем, не существует ли уже UserProcedure для этой процедуры и пользователя с такими датами
-                    var existingUserProcedures = await _unitOfWork.UserProcedureRepository.GetByUserIdAsync(SelectedUser.Id);
-                    var userProcedureExists = existingUserProcedures.Any(up => up.ProcedureId == userRoleProcedure.ProcedureId && 
-                                                                              up.StartData == startDate && 
-                                                                              up.EndData == endDate);
-                    
-                    if (!userProcedureExists)
-                    {
-                        var userProcedure = new UserProcedure(SelectedUser.Id, userRoleProcedure.ProcedureId, startDate, endDate, false);
-                        await _unitOfWork.UserProcedureRepository.AddAsync(userProcedure);
-                    }
-                }
-
-                await _unitOfWork.SaveAsync();
                 await LoadDataAsync();
                 ModernMessageDialog.Show("Медосмотр успешно создан со всеми процедурами роли", "Успех", MessageType.Success);
             }
@@ -315,28 +293,20 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
-                if (!DataStart.HasValue || !DataEnd.HasValue)
+                var dialog = new Helper.Dialogs.EditMedicalExaminationDialog(SelectedMedicalExamination);
+                if (dialog.ShowDialog() == true)
                 {
-                    ModernMessageDialog.Show("Выберите даты начала и окончания", "Предупреждение", MessageType.Warning);
-                    return;
+                    SelectedMedicalExamination.DataStart = DateOnly.FromDateTime(dialog.DataStart.Value.Date);
+                    SelectedMedicalExamination.DataEnd = DateOnly.FromDateTime(dialog.DataEnd.Value.Date);
+                    
+                    SelectedMedicalExamination.Message = dialog.Message;
+                    
+                    await _unitOfWork.MedicalExaminationRepository.UpdateAsync(SelectedMedicalExamination);
+                    await _unitOfWork.SaveAsync();
+
+                    await LoadDataAsync();
+                    ModernMessageDialog.Show("Медосмотр успешно обновлен", "Успех", MessageType.Success);
                 }
-
-                if (DataStart.Value > DataEnd.Value)
-                {
-                    ModernMessageDialog.Show("Дата начала не может быть позже даты окончания", "Ошибка", MessageType.Error);
-                    return;
-                }
-
-                SelectedMedicalExamination.DataStart = DateOnly.FromDateTime(DataStart.Value.Date);
-                SelectedMedicalExamination.DataEnd = DateOnly.FromDateTime(DataEnd.Value.Date);
-                // IsValid не устанавливается вручную - он обновляется автоматически на основе UserProcedure
-                SelectedMedicalExamination.Message = Message;
-                
-                await _unitOfWork.MedicalExaminationRepository.UpdateAsync(SelectedMedicalExamination);
-                await _unitOfWork.SaveAsync();
-
-                await LoadDataAsync();
-                ModernMessageDialog.Show("Медосмотр успешно обновлен", "Успех", MessageType.Success);
             }
             catch (Exception ex)
             {
@@ -354,11 +324,22 @@ namespace MedicalAir.ViewModel.Doctor
                     return;
                 }
 
+                var userProcedures = await _unitOfWork.UserProcedureRepository.GetByUserIdAsync(SelectedMedicalExamination.UserId);
+                var examinationProcedures = userProcedures
+                    .Where(up => up.StartData == SelectedMedicalExamination.DataStart && 
+                                up.EndData == SelectedMedicalExamination.DataEnd)
+                    .ToList();
+
+                foreach (var procedure in examinationProcedures)
+                {
+                    await _unitOfWork.UserProcedureRepository.DeleteAsync(procedure);
+                }
+
                 await _unitOfWork.MedicalExaminationRepository.DeleteAsync(SelectedMedicalExamination);
                 await _unitOfWork.SaveAsync();
 
                 await LoadDataAsync();
-                ModernMessageDialog.Show("Медосмотр успешно удален", "Успех", MessageType.Success);
+                ModernMessageDialog.Show("Медосмотр и все связанные процедуры успешно удалены", "Успех", MessageType.Success);
             }
             catch (Exception ex)
             {

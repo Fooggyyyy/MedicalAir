@@ -21,4 +21,3 @@ namespace MedicalAir.Helper.Converters
         }
     }
 }
-

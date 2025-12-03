@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterOwner"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -67,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -245,7 +244,6 @@
             </StackPanel>
         </Border>
         
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <TabControl BorderThickness="0" Background="Transparent">
                 <TabControl.Resources>
@@ -266,7 +264,6 @@
                     </Style>
                 </TabControl.Resources>
 
-                <!-- История пополнений лекарств -->
                 <TabItem Header="💊 История пополнений лекарств">
                     <Border Background="White" Padding="15" CornerRadius="8">
                         <Border.Effect>
@@ -289,7 +286,6 @@
                     </Border>
                 </TabItem>
 
-                <!-- Медосмотры пилотов -->
                 <TabItem Header="✈️ Медосмотры пилотов">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -322,7 +318,6 @@
                     </Grid>
                 </TabItem>
 
-                <!-- Не пройденные медосмотры пилотов -->
                 <TabItem Header="❌ Не пройденные медосмотры пилотов">
                     <DataGrid x:Name="PilotInvalidExaminationsDataGrid" ItemsSource="{Binding PilotInvalidExaminations}"
                              AutoGenerateColumns="False"
@@ -347,7 +342,6 @@
                     </DataGrid>
                 </TabItem>
 
-                <!-- Медосмотры бортпроводников -->
                 <TabItem Header="👥 Медосмотры бортпроводников">
                     <DataGrid x:Name="FlightAttendantValidExaminationsDataGrid" ItemsSource="{Binding FlightAttendantValidExaminations}"
                              AutoGenerateColumns="False"
@@ -372,7 +366,6 @@
                     </DataGrid>
                 </TabItem>
 
-                <!-- Не пройденные медосмотры бортпроводников -->
                 <TabItem Header="❌ Не пройденные медосмотры бортпроводников">
                     <DataGrid x:Name="FlightAttendantInvalidExaminationsDataGrid" ItemsSource="{Binding FlightAttendantInvalidExaminations}"
                              AutoGenerateColumns="False"

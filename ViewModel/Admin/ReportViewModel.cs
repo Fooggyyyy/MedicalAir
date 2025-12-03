@@ -2,11 +2,8 @@
 using MedicalAir.Helper.Dialogs;
 using MedicalAir.Helper.ViewModelBase;
 using MedicalAir.Model.Entites;
-using System;
+using MedicalAir.Model.Enums;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace MedicalAir.ViewModel.Admin
@@ -65,7 +62,6 @@ namespace MedicalAir.ViewModel.Admin
             ReportUsers = new ObservableCollection<ReportUser>();
             ReportMedicins = new ObservableCollection<ReportMedicin>();
 
-            // Устанавливаем значения по умолчанию (последние 30 дней)
             DateStart = DateTime.Now.AddDays(-30);
             DateEnd = DateTime.Now;
 
@@ -91,13 +87,19 @@ namespace MedicalAir.ViewModel.Admin
                 var startDate = DateOnly.FromDateTime(DateStart.Value.Date);
                 var endDate = DateOnly.FromDateTime(DateEnd.Value.Date);
 
-                var usersReports = await _unitOfWork.ReportUserRepository.GetByDateRangeAsync(startDate, endDate);
+                await GenerateUserReportAsync(startDate, endDate);
+                
                 var medicinsReports = await _unitOfWork.ReportMedicinRepository.GetByDateRangeAsync(startDate, endDate);
-
-                ReportUsers = new ObservableCollection<ReportUser>(usersReports);
                 ReportMedicins = new ObservableCollection<ReportMedicin>(medicinsReports);
 
-                if (!ReportUsers.Any() && !ReportMedicins.Any())
+                if (ReportUsers.Any() || ReportMedicins.Any())
+                {
+                    var message = $"Отчеты загружены за период с {startDate:dd.MM.yyyy} по {endDate:dd.MM.yyyy}:\n";
+                    message += $"• Отчетов по пользователям: {ReportUsers.Count()}\n";
+                    message += $"• Отчетов по медикаментам: {ReportMedicins.Count()}";
+                    ModernMessageDialog.Show(message, "Успех", MessageType.Success);
+                }
+                else
                 {
                     ModernMessageDialog.Show($"За период с {startDate:dd.MM.yyyy} по {endDate:dd.MM.yyyy} отчеты не найдены", 
                         "Информация", MessageType.Info);
@@ -106,6 +108,69 @@ namespace MedicalAir.ViewModel.Admin
             catch (Exception ex)
             {
                 ModernMessageDialog.Show($"Ошибка при загрузке отчетов: {ex.Message}", "Ошибка", MessageType.Error);
+            }
+        }
+
+        private async Task GenerateUserReportAsync(DateOnly startDate, DateOnly endDate)
+        {
+            try
+            {
+                var allUsers = await _unitOfWork.UserRepository.GetAllAsync();
+                var filteredUsers = allUsers
+                    .Where(u => u.Roles == UserRoles.PILOT || u.Roles == UserRoles.FLIGHTATTENDAT)
+                    .Where(u => u.Roles != UserRoles.ADMIN && u.Roles != UserRoles.DOCTOR)
+                    .ToList();
+
+                if (!filteredUsers.Any())
+                {
+                    ModernMessageDialog.Show($"За период с {startDate:dd.MM.yyyy} по {endDate:dd.MM.yyyy} пользователи не найдены", 
+                        "Информация", MessageType.Info);
+                    ReportUsers = new ObservableCollection<ReportUser>();
+                    return;
+                }
+
+                var allExaminations = await _unitOfWork.MedicalExaminationRepository.GetAllAsync();
+                
+                var examinationsInPeriod = allExaminations
+                    .Where(e => e.User != null && 
+                               (e.User.Roles == UserRoles.PILOT || e.User.Roles == UserRoles.FLIGHTATTENDAT) &&
+                               (e.DataStart <= endDate && e.DataEnd >= startDate))
+                    .ToList();
+
+                var totalUsers = filteredUsers.Count;
+                
+                var usersWithExaminations = examinationsInPeriod
+                    .Select(e => e.UserId)
+                    .Distinct()
+                    .ToList();
+                var totalUsersME = usersWithExaminations.Count;
+                
+                var passed = examinationsInPeriod.Count(e => e.IsValid);
+                var notPassed = examinationsInPeriod.Count(e => !e.IsValid);
+                
+                var passedPercent = examinationsInPeriod.Any() ? (passed * 100) / examinationsInPeriod.Count : 0;
+                var notPassedPercent = examinationsInPeriod.Any() ? (notPassed * 100) / examinationsInPeriod.Count : 0;
+
+                var report = new ReportUser(
+                    startDate,
+                    endDate,
+                    totalUsers,
+                    totalUsersME,
+                    passed,
+                    notPassed,
+                    passedPercent,
+                    notPassedPercent
+                );
+
+                await _unitOfWork.ReportUserRepository.AddAsync(report);
+                await _unitOfWork.SaveAsync();
+
+                var reports = await _unitOfWork.ReportUserRepository.GetByDateRangeAsync(startDate, endDate);
+                ReportUsers = new ObservableCollection<ReportUser>(reports.OrderByDescending(r => r.DataEnd));
+            }
+            catch (Exception ex)
+            {
+                ModernMessageDialog.Show($"Ошибка при генерации отчета по пользователям: {ex.Message}", "Ошибка", MessageType.Error);
             }
         }
     }

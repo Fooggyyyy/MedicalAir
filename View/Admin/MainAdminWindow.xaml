@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         Background="#F5F7FA">
     <Grid>
-        <!-- Верхняя панель -->
+        
         <Border Background="#F3F3F3"
                 Height="50"
                 VerticalAlignment="Top"
@@ -66,7 +66,6 @@
             </Grid>
         </Border>
 
-        <!-- Боковая панель навигации -->
         <Border Background="White"
                 Width="250"
                 VerticalAlignment="Stretch"
@@ -129,7 +128,6 @@
             </StackPanel>
         </Border>
 
-        <!-- Основной контент -->
         <Grid Margin="280,90,20,20" 
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch">
@@ -143,7 +141,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Самолеты -->
             <Border Grid.Row="1" Grid.Column="0"
                     Background="White"
                     CornerRadius="10"
@@ -270,7 +267,6 @@
                 </DockPanel>
             </Border>
 
-            <!-- Пользователи -->
             <Border Grid.Row="1" Grid.Column="1"
                     Background="White"
                     CornerRadius="10"
@@ -402,7 +398,6 @@
                 </DockPanel>
             </Border>
 
-            <!-- Регистрации пользователей -->
             <Border Grid.Row="1" Grid.Column="2"
                     Background="White"
                     CornerRadius="10"

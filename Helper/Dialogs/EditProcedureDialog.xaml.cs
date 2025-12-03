@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using MedicalAir.Model.Entites;
 
@@ -26,7 +25,6 @@ namespace MedicalAir.Helper.Dialogs
                 UnitsTextBox.Text = procedure.Units;
                 MustBeTrueCheckBox.IsChecked = procedure.MustBeTrue;
                 
-                // Блокируем поля если это тест
                 if (procedure.MustBeTrue)
                 {
                     MinValueTextBox.IsEnabled = false;
@@ -97,4 +95,3 @@ namespace MedicalAir.Helper.Dialogs
         }
     }
 }
-

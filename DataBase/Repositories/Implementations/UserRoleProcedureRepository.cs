@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MedicalAir.Model.Entites;
 using MedicalAir.Model.Enums;
-using MedicalAir.DataBase;
 using MedicalAir.DataBase.Repositories.Interfaces;
 
 namespace MedicalAir.DataBase.Repositories.Implementations
@@ -19,14 +18,6 @@ namespace MedicalAir.DataBase.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<UserRoleProcedure>> GetByProcedureIdAsync(int procedureId)
-        {
-            return await _dbSet
-                .Include(urp => urp.Procedure)
-                .Where(urp => urp.ProcedureId == procedureId)
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<UserRoleProcedure>> GetByRoleAsync(UserRoles role)
         {
             return await _dbSet
@@ -36,4 +27,3 @@ namespace MedicalAir.DataBase.Repositories.Implementations
         }
     }
 }
-

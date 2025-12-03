@@ -7,4 +7,3 @@ namespace MedicalAir.DataBase.Repositories.Interfaces
         Task<IEnumerable<ReportUser>> GetByDateRangeAsync(DateOnly startDate, DateOnly endDate);
     }
 }
-
